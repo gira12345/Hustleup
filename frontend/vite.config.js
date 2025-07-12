@@ -6,9 +6,9 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
-    strictPort: true, // Falha se a porta 3000 não estiver disponível
-    host: 'localhost', // Apenas localhost, não mostrar IPs da rede
-    open: false, // Não abrir automaticamente o browser
+    strictPort: true,
+    host: 'localhost',
+    open: false,
     proxy: {
       '/api': {
         target: process.env.VITE_API_URL || 'http://localhost:3001',
@@ -21,6 +21,11 @@ export default defineConfig({
         secure: false,
       },
     }
+  },
+  preview: {
+    host: true,
+    port: process.env.PORT || 4173,
+    allowedHosts: ['hustleup.onrender.com']
   },
   build: {
     outDir: 'dist',
