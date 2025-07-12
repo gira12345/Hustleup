@@ -12,6 +12,12 @@ const allowedOrigins = [
   'https://your-frontend-url.onrender.com' // Substitua pela URL do seu frontend no Render
 ];
 
+const allowedOrigins = [
+  'https://hustleup-frontend.onrender.com',
+  'http://localhost:5173' // para desenvolvimento local
+];
+
+
 app.use(cors({
   origin: function (origin, callback) {
     // Permite requisições sem origin (ex: mobile apps, Postman)
