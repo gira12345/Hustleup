@@ -103,7 +103,7 @@ export default function Propostas() {
   const verProposta = (proposta) => {
     const estadoNormalizado = normalizarEstado(proposta.estado);
     
-    if (estadoNormalizado === 'ativo') {
+    if (estadoNormalizado === 'ativa' || estadoNormalizado === 'ativo') {
       // Se a proposta está ativa, navegar para a página de visualização
       navigate(`/empresa/ver-proposta/${proposta.id}`);
     } else if (estadoNormalizado === 'pendente') {

@@ -1,4 +1,5 @@
 const db = require('../models');
+const { Op } = require('sequelize');
 const { Empresa, Estudante, Proposta, PedidoRemocao, User } = require('../models');
 const bcrypt = require('bcrypt');
 
@@ -45,7 +46,7 @@ exports.validarProposta = async (req, res) => {
     if (!proposta) {
       return res.status(404).json({ message: 'Proposta não encontrada' });
     }
-    proposta.estado = 'ativo';
+    proposta.estado = 'ativa';
     // Atualiza data_limite_ativacao para 30 dias à frente
     proposta.data_limite_ativacao = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
     await proposta.save();
@@ -158,7 +159,7 @@ exports.dashboard = async (req, res) => {
     const totalGestores = await db.User.count({ where: { role: 'gestor' } });
     const totalPropostas = await db.Proposta.count();
     const propostasPendentes = await db.Proposta.count({ where: { estado: 'pendente' } });
-    const propostasAtivas = await db.Proposta.count({ where: { estado: 'ativo' } });
+    const propostasAtivas = await db.Proposta.count({ where: { estado: { [Op.in]: ['ativa', 'ativo'] } } });
     const pedidosRemocaoPendentes = await db.PedidoRemocao.count({ where: { estado: 'pendente' } });
     res.json({
       totalEmpresas,
@@ -290,7 +291,7 @@ exports.alterarEstadoProposta = async (req, res) => {
     const { estado } = req.body;
     
     // Estados válidos (conforme a base de dados)
-    const estadosValidos = ['pendente', 'ativo', 'inativo', 'arquivado'];
+    const estadosValidos = ['pendente', 'ativa', 'inativa', 'arquivado'];
     
     if (!estado || !estadosValidos.includes(estado)) {
       return res.status(400).json({ 
@@ -307,7 +308,7 @@ exports.alterarEstadoProposta = async (req, res) => {
     proposta.estado = estado;
     
     // Se ativando, atualizar data limite
-    if (estado === 'ativo' && estadoAnterior !== 'ativo') {
+    if (estado === 'ativa' && estadoAnterior !== 'ativa') {
       proposta.data_limite_ativacao = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
     }
     
@@ -723,7 +724,7 @@ exports.reativarProposta = async (req, res) => {
   try {
     const proposta = await Proposta.findByPk(req.params.id);
     if (!proposta) return res.status(404).json({ message: 'Proposta não encontrada' });
-    proposta.estado = 'ativo';
+    proposta.estado = 'ativa';
     await proposta.save();
     res.json({ message: 'Proposta reativada com sucesso', proposta });
   } catch (err) {
@@ -740,7 +741,7 @@ exports.aprovarProposta = async (req, res) => {
       return res.status(404).json({ message: 'Proposta não encontrada' });
     }
     
-    proposta.estado = 'ativo';
+    proposta.estado = 'ativa';
     proposta.data_limite_ativacao = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
     await proposta.save();
     
@@ -798,7 +799,7 @@ exports.ativarProposta = async (req, res) => {
       return res.status(404).json({ message: 'Proposta não encontrada' });
     }
     
-    proposta.estado = 'ativo';
+    proposta.estado = 'ativa';
     proposta.data_limite_ativacao = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
     await proposta.save();
     
@@ -820,7 +821,7 @@ exports.testeObterProposta = async (req, res) => {
       id: parseInt(id),
       nome: 'Proposta de Teste',
       descricao: 'Esta é uma proposta de teste para verificar se a rota funciona',
-      estado: 'ativo',
+      estado: 'ativa',
       empresa: {
         id: 1,
         nome: 'Empresa de Teste'
@@ -884,7 +885,7 @@ exports.getKPIPropostas = async (req, res) => {
   try {
     const [total, ativas, pendentes, arquivadas, desativadas] = await Promise.all([
       Proposta.count(),
-      Proposta.count({ where: { estado: 'ativo' } }),
+      Proposta.count({ where: { estado: { [Op.in]: ['ativa', 'ativo'] } } }),
       Proposta.count({ where: { estado: 'pendente' } }),
       Proposta.count({ where: { estado: 'arquivado' } }),
       Proposta.count({ where: { estado: 'desativo' } })

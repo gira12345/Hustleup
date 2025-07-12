@@ -8,6 +8,12 @@ const checkRole = require('../middleware/checkRole');
 // Ver todas as propostas (modo público ou autenticado)
 router.get('/', propostaController.listarPropostasPublicas);
 
+// Rota temporária para debug - ver todas as propostas ativas
+router.get('/debug/ativas', propostaController.listarTodasPropostasAtivas);
+
+// Rota temporária para corrigir estados inconsistentes
+router.patch('/debug/corrigir-estados', propostaController.corrigirEstadosPropostas);
+
 // Filtros avançados (por setor, estado, texto, etc.)
 router.get('/filtro/avancado', propostaController.filtrarPropostasAvancado);
 

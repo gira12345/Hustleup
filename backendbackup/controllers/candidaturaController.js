@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { Candidatura, Estudante, Proposta, Empresa } = require('../models');
 
 // Criar candidatura
@@ -17,7 +18,7 @@ exports.criarCandidatura = async (req, res) => {
 
     // Verificar se a proposta existe e está ativa
     const proposta = await Proposta.findOne({
-      where: { id: propostaId, estado: 'ativa' }
+      where: { id: propostaId, estado: { [Op.in]: ['ativa', 'ativo'] } }
     });
 
     if (!proposta) {

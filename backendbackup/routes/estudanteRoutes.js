@@ -34,7 +34,7 @@ router.get('/debug/competencias', async (req, res) => {
     
     const propostas = await Proposta.findAll({
       where: { 
-        estado: ['ativo', 'ativa', 'aprovada', 'validada']
+        estado: { [Op.in]: ['ativa', 'ativo', 'aprovada', 'validada'] }
       },
       include: [
         {

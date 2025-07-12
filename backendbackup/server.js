@@ -11,13 +11,23 @@ const { sequelize } = require('./models');
 const PORT = process.env.PORT || 3001;
 
 // Iniciar servidor
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`HustleUp Backend funcionando em http://localhost:${PORT}`);
   
   // Testar conexão com BD
   sequelize.authenticate()
     .then(() => {
       console.log('Base de dados conectada!');
+      
+      // Sincronizar modelos com BD (apenas em desenvolvimento)
+      if (process.env.NODE_ENV !== 'production') {
+        return sequelize.sync({ alter: true });
+      }
+    })
+    .then(() => {
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('Modelos sincronizados com a base de dados!');
+      }
     })
     .catch((err) => {
       console.error('Erro na conexão com BD:', err.message);

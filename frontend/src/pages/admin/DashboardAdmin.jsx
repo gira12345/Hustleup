@@ -280,7 +280,7 @@ export default function DashboardAdmin() {
                             Aprovar
                           </button>
                         )}
-                        {proposta.estado === 'ativo' && (
+                        {(proposta.estado === 'ativa' || proposta.estado === 'ativo') && (
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -302,7 +302,7 @@ export default function DashboardAdmin() {
                             Ativar
                           </button>
                         )}
-                        {(proposta.estado === 'ativo' || proposta.estado === 'inativo') && (
+                        {((proposta.estado === 'ativa' || proposta.estado === 'ativo') || (proposta.estado === 'inativa' || proposta.estado === 'inativo')) && (
                           <button
                             onClick={(e) => {
                               e.stopPropagation();

@@ -1,10 +1,11 @@
 const { Proposta, Empresa, Setor } = require('../models');
+const { Op } = require('sequelize');
 
 // Ver todas as propostas (ativas)
 exports.getTodasPropostas = async (req, res) => {
   try {
     const propostas = await Proposta.findAll({
-      where: { estado: 'ativa' },
+      where: { estado: ['ativa', 'ativo'] }, // Usando array simples
       include: Empresa
     });
     res.json(propostas);
@@ -45,7 +46,7 @@ exports.getPropostasPorSetor = async (req, res) => {
   const { setorId } = req.params;
   try {
     const propostas = await Proposta.findAll({
-      where: { estado: 'ativa' },
+      where: { estado: { [Op.in]: ['ativa', 'ativo'] } }, // Corrigido para aceitar ambos os estados
       include: {
         model: Empresa,
         include: {
@@ -63,13 +64,12 @@ exports.getPropostasPorSetor = async (req, res) => {
 // Função utilitária para desativar propostas expiradas
 async function desativarPropostasExpiradas() {
   const { Proposta } = require('../models');
-  const { Op } = require('sequelize');
   const now = new Date();
   await Proposta.update(
     { estado: 'inativa' },
     {
       where: {
-        estado: 'ativa',
+        estado: { [Op.in]: ['ativa', 'ativo'] }, // Corrigido para aceitar ambos os estados
         data_limite_ativacao: { [Op.lt]: now }
       }
     }
@@ -79,11 +79,12 @@ async function desativarPropostasExpiradas() {
 // Listar propostas públicas (todas as ativas e não expiradas)
 exports.listarPropostasPublicas = async (req, res) => {
   try {
-    await desativarPropostasExpiradas();
-    const { Op } = require('sequelize');
+    // Comentado temporariamente para debug
+    // await desativarPropostasExpiradas();
     const where = {
-      estado: 'ativa',
-      data_limite_ativacao: { [Op.gte]: new Date() }
+      estado: ['ativa', 'ativo'] // Usando array simples
+      // Comentado temporariamente para debug
+      // data_limite_ativacao: { [Op.gte]: new Date() }
     };
     if (req.query.departamento) {
       where.departamento = req.query.departamento;
@@ -92,6 +93,7 @@ exports.listarPropostasPublicas = async (req, res) => {
       where,
       include: Empresa
     });
+    console.log('Propostas encontradas:', propostas.length);
     res.status(200).json(propostas);
   } catch (err) {
     res.status(500).json({ message: 'Erro ao listar propostas públicas', error: err.message });
@@ -176,18 +178,13 @@ exports.filtrarPropostasAvancado = async (req, res) => {
 
     if (estado) where.estado = estado;
     if (empresaId) where.empresaId = empresaId;
-    if (titulo) where.titulo = { $like: `%${titulo}%` };
-    if (dataCriacao) where.createdAt = dataCriacao;
+    if (titulo) where.titulo = { [Op.like]: `%${titulo}%` };
+    if (dataCriacao) where.createdAt = { [Op.eq]: dataCriacao };
 
     // Filtro por setor (relacional)
     if (setorId) {
       include[0].include = [{ model: Setor, where: { id: setorId } }];
     }
-
-    // Sequelize v6+: use Op.like e Op.eq
-    const { Op } = require('sequelize');
-    if (titulo) where.titulo = { [Op.like]: `%${titulo}%` };
-    if (dataCriacao) where.createdAt = { [Op.eq]: dataCriacao };
 
     const propostas = await Proposta.findAll({ where, include });
     res.status(200).json(propostas);
@@ -215,30 +212,55 @@ exports.marcarComoAtribuida = async (req, res) => {
 // Buscar propostas que tenham pelo menos uma área igual às competências do estudante
 exports.propostasMatchEstudante = async (req, res) => {
   try {
-    const { Estudante, Proposta } = require('../models');
+    const { Estudante } = require('../models');
+    console.log('🔍 Iniciando busca de propostas compatíveis');
+    
     // Pega o estudante autenticado pelo userId do token
     const userId = req.user.id;
+    console.log('👤 UserId:', userId);
+    
     const estudante = await Estudante.findOne({ where: { userId } });
     if (!estudante) {
+      console.log('❌ Estudante não encontrado');
       return res.status(404).json({ message: 'Estudante não encontrado' });
     }
+    
+    console.log('✅ Estudante encontrado:', estudante.nome);
+    console.log('🎯 Competências do estudante:', estudante.competencias);
+    
     // Suporta competências como string separada por vírgula ou array
     let competencias = estudante.competencias;
     if (typeof competencias === 'string') {
       competencias = competencias.split(',').map(s => s.trim());
     }
-    // Busca propostas que tenham pelo menos uma área igual
-    const { Op } = require('sequelize');
+    
+    console.log('📋 Competências processadas:', competencias);
+    
+    // Busca propostas compatíveis - versão simplificada primeiro
     const propostas = await Proposta.findAll({
       where: {
-        areas: {
-          [Op.overlap]: competencias
-        },
-        estado: 'ativa'
-      }
+        // Removendo temporariamente o filtro de áreas para debug
+        // areas: {
+        //   [Op.overlap]: competencias
+        // },
+        estado: ['ativa', 'ativo'] // Usando array simples em vez de Op.in
+      },
+      include: Empresa
     });
-    res.json(propostas);
+    
+    console.log('📊 Propostas encontradas:', propostas.length);
+    
+    // Filtrar manualmente por áreas (temporário para debug)
+    const propostasCompativeis = propostas.filter(proposta => {
+      if (!proposta.areas || !Array.isArray(proposta.areas)) return false;
+      return proposta.areas.some(area => competencias.includes(area));
+    });
+    
+    console.log('✅ Propostas compatíveis após filtro:', propostasCompativeis.length);
+    
+    res.json(propostasCompativeis);
   } catch (err) {
+    console.error('❌ Erro detalhado ao buscar propostas compatíveis:', err);
     res.status(500).json({ message: 'Erro ao buscar propostas compatíveis', error: err.message });
   }
 };
@@ -260,6 +282,7 @@ exports.criarProposta = async (req, res) => {
       descricao,
       areas,
       empresaId,
+      estado: 'ativa', // Criar proposta já como ativa
       data_limite_ativacao: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
     };
     console.log('DEBUG NOVA PROPOSTA:', novaProposta);
@@ -267,6 +290,55 @@ exports.criarProposta = async (req, res) => {
     res.status(201).json({ message: 'Proposta criada com sucesso!', proposta });
   } catch (err) {
     res.status(500).json({ message: 'Erro ao criar proposta', error: err.message });
+  }
+};
+
+// Função temporária para debug - listar todas as propostas ativas sem filtro de data
+exports.listarTodasPropostasAtivas = async (req, res) => {
+  try {
+    const propostas = await Proposta.findAll({
+      where: { estado: ['ativa', 'ativo'] }, // Usando array simples
+      include: Empresa
+    });
+    console.log('Propostas ativas encontradas:', propostas.length);
+    propostas.forEach(p => {
+      console.log(`ID: ${p.id}, Nome: ${p.nome}, Estado: ${p.estado}, Data limite: ${p.data_limite_ativacao}`);
+    });
+    res.status(200).json(propostas);
+  } catch (err) {
+    console.error('Erro ao listar propostas ativas:', err);
+    res.status(500).json({ message: 'Erro ao listar propostas ativas', error: err.message });
+  }
+};
+
+// Função para corrigir estados inconsistentes na base de dados
+exports.corrigirEstadosPropostas = async (req, res) => {
+  try {
+    // Corrigir "ativo" para "ativa"
+    const resultadoAtivo = await Proposta.update(
+      { estado: 'ativa' },
+      { where: { estado: 'ativo' } }
+    );
+    
+    // Corrigir "inativo" para "inativa" (se existir)
+    const resultadoInativo = await Proposta.update(
+      { estado: 'inativa' },
+      { where: { estado: 'inativo' } }
+    );
+    
+    console.log(`Corrigidas ${resultadoAtivo[0]} propostas de "ativo" para "ativa"`);
+    console.log(`Corrigidas ${resultadoInativo[0]} propostas de "inativo" para "inativa"`);
+    
+    res.status(200).json({ 
+      message: 'Estados das propostas corrigidos com sucesso!',
+      corrigidas: {
+        ativo_para_ativa: resultadoAtivo[0],
+        inativo_para_inativa: resultadoInativo[0]
+      }
+    });
+  } catch (err) {
+    console.error('Erro ao corrigir estados das propostas:', err);
+    res.status(500).json({ message: 'Erro ao corrigir estados das propostas', error: err.message });
   }
 };
 

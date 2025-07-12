@@ -1,4 +1,5 @@
 const db = require('../models');
+const { Op } = require('sequelize');
 const { Empresa, Estudante, Proposta, PedidoRemocao, User, Setor, EstudanteFavorito } = db;
 
 // Obter perfil do estudante
@@ -120,7 +121,7 @@ exports.getPropostasMatch = async (req, res) => {
     // Buscar todas as propostas ativas (verificar vários estados)
     const propostas = await Proposta.findAll({
       where: { 
-        estado: ['ativo', 'ativa', 'aprovada', 'validada']
+        estado: { [Op.in]: ['ativa', 'ativo', 'aprovada', 'validada'] }
       },
       include: [
         {
@@ -176,7 +177,7 @@ exports.getPropostasMatch = async (req, res) => {
 exports.getTodasPropostas = async (req, res) => {
   try {
     const propostas = await Proposta.findAll({
-      where: { estado: 'ativa' },
+      where: { estado: { [Op.in]: ['ativa', 'ativo'] } },
       include: Empresa
     });
 
@@ -342,7 +343,7 @@ exports.dashboard = async (req, res) => {
 
     // Estatísticas
     const totalPropostasDisponiveis = await Proposta.count({
-      where: { estado: 'ativa' }
+      where: { estado: { [Op.in]: ['ativa', 'ativo'] } }
     });
 
     const totalFavoritos = await EstudanteFavorito.count({

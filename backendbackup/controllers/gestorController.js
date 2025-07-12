@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { Empresa, Proposta, Setor, Estudante, PedidoRemocao, Notificacao, Departamento, User } = require('../models');
 
 // Submeter proposta em nome de uma empresa
@@ -122,7 +123,7 @@ exports.dashboard = async (req, res) => {
     
     // Contar propostas por estado sem filtros complexos por enquanto
     const totalPropostas = await Proposta.count().catch(() => 0);
-    const propostasAtivas = await Proposta.count({ where: { estado: 'ativa' } }).catch(() => 0);
+    const propostasAtivas = await Proposta.count({ where: { estado: { [Op.in]: ['ativa', 'ativo'] } } }).catch(() => 0);
     const propostasPendentes = await Proposta.count({ where: { estado: 'pendente' } }).catch(() => 0);
     
     // Número fixo de departamentos por enquanto para evitar erro
