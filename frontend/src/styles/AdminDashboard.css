@@ -1,0 +1,138 @@
+/* Estilos customizados para o painel de administração */
+
+/* Hover effects para sidebar */
+.hover-bg-secondary:hover {
+  background-color: rgba(108, 117, 125, 0.3) !important;
+  transition: all 0.3s ease;
+}
+
+/* Animações suaves para cards */
+.card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Efeitos de botões */
+.btn {
+  transition: all 0.2s ease-in-out;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Cores de gradiente customizadas */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.bg-gradient-success {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.bg-gradient-info {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.bg-gradient-warning {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+/* Efeitos para tabelas */
+.table tbody tr:hover {
+  background-color: rgba(0, 123, 255, 0.05);
+  transform: scale(1.001);
+  transition: all 0.2s ease;
+}
+
+/* Loading spinner personalizado */
+.loading-container {
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+}
+
+/* Badges customizados */
+.badge {
+  font-size: 0.75em;
+  font-weight: 600;
+}
+
+/* Modais responsivos */
+@media (max-width: 768px) {
+  .modal-dialog {
+    margin: 1rem 0.5rem;
+  }
+}
+
+/* Sidebar responsiva */
+@media (max-width: 992px) {
+  .admin-sidebar {
+    width: 100% !important;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    transition: left 0.3s ease;
+    z-index: 1050;
+  }
+  
+  .admin-sidebar.show {
+    left: 0;
+  }
+}
+
+/* Efeitos de foco para acessibilidade */
+.btn:focus,
+.form-control:focus,
+.form-select:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  border-color: #86b7fe;
+}
+
+/* Estilo para estatísticas */
+.stats-card {
+  background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.8));
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Animação de entrada */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 40px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Cores de status personalizadas */
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+}
+
+.status-active {
+  background-color: #d1e7dd;
+  color: #0f5132;
+  border: 1px solid #a3d9a5;
+}
+
+.status-inactive {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f1aeb5;
+}
