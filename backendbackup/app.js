@@ -5,16 +5,10 @@ const path = require('path');
 
 const app = express();
 
-// Middleware básico
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5173',
-  'https://your-frontend-url.onrender.com' // Substitua pela URL do seu frontend no Render
-];
-
-const allowedOrigins = [
-  'https://hustleup-frontend.onrender.com',
-  'http://localhost:5173' // para desenvolvimento local
+  'https://hustleup-frontend.onrender.com' // URL real do frontend
 ];
 
 
