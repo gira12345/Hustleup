@@ -52,7 +52,7 @@ const Registar = () => {
     setLoading(true);
 
     try {
-      const response = await api.post('/auth/registar-empresa', {
+      const response = await api.post('/api/auth/registar-empresa', {
         nome: formData.nome,
         email: formData.email,
         password: formData.password,

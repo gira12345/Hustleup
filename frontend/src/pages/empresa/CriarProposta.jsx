@@ -27,7 +27,7 @@ export default function CriarProposta() {
     const carregarDepartamentos = async () => {
       try {
         // Usar o endpoint da empresa para departamentos
-        const res = await api.get('/empresa/departamentos');
+        const res = await api.get('/api/empresa/departamentos');
         
         console.log('Departamentos recebidos:', res.data);
         
@@ -75,7 +75,7 @@ export default function CriarProposta() {
     setSucesso(null);
     
     try {
-      await api.post('/empresa/propostas', formData);
+      await api.post('/api/empresa/propostas', formData);
       setSucesso('Proposta criada com sucesso!');
       setTimeout(() => navigate('/empresa/propostas'), 1500);
     } catch (err) {
