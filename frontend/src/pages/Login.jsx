@@ -25,7 +25,7 @@ const Login = () => {
     console.log('Dados do login:', { email, senha });
     
     try {
-      const resposta = await api.post('/api/auth/login', {
+      const resposta = await api.post('/auth/login', {
         email,
         password: senha
       });

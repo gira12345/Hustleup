@@ -13,12 +13,16 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
+    console.log('CORS Origin:', origin);
+    console.log('Allowed Origins:', allowedOrigins);
+    
     // Permite requisições sem origin (ex: mobile apps, Postman)
     if (!origin) return callback(null, true);
     
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
+      console.log('CORS BLOCKED:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },
@@ -33,7 +37,12 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Rota de teste
 app.get('/api/test', (req, res) => {
-  res.json({ message: 'Backend HustleUp operacional!' });
+  res.json({ 
+    message: 'Backend HustleUp operacional!', 
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV,
+    allowedOrigins: allowedOrigins
+  });
 });
 
 // Evitar erro 404 do favicon
