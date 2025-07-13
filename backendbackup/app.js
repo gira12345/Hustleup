@@ -5,12 +5,12 @@ const path = require('path');
 
 const app = express();
 
-// Middleware básico
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5173',
-  'https://hustleup-frontend.onrender.com' // URL do seu frontend no Render
+  'https://hustleup-frontend.onrender.com' // URL real do frontend
 ];
+
 
 app.use(cors({
   origin: function (origin, callback) {
