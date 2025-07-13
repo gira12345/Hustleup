@@ -1,23 +1,26 @@
 {
   "development": {
-    "username": "estudante",
-    "password": "estudante123",
-    "database": "projeto_recap",
-    "host": "127.0.0.1",
-    "dialect": "postgres"
+    "username": "hustleup_db_icdl_user",
+    "password": "NxYBfFKIEohBC7rMXFNp5H8JvuTQvRSC",
+    "database": "hustleup_db_icdl",
+    "host": "dpg-d1pcvimr433s73d942t0-a.frankfurt-postgres.render.com",
+    "dialect": "postgres",
+    "port": 5432
   },
   "test": {
-    "username": "estudante",
-    "password": "estudante123",
-    "database": "projeto_recap_test",
-    "host": "127.0.0.1",
-    "dialect": "postgres"
+    "username": "hustleup_db_icdl_user",
+    "password": "NxYBfFKIEohBC7rMXFNp5H8JvuTQvRSC",
+    "database": "hustleup_db_icdl",
+    "host": "dpg-d1pcvimr433s73d942t0-a.frankfurt-postgres.render.com",
+    "dialect": "postgres",
+    "port": 5432
   },
   "production": {
-    "username": "estudante",
-    "password": "estudante123",
-    "database": "projeto_recap_prod",
-    "host": "127.0.0.1",
-    "dialect": "postgres"
+    "username": "hustleup_db_icdl_user",
+    "password": "NxYBfFKIEohBC7rMXFNp5H8JvuTQvRSC",
+    "database": "hustleup_db_icdl",
+    "host": "dpg-d1pcvimr433s73d942t0-a.frankfurt-postgres.render.com",
+    "dialect": "postgres",
+    "port": 5432
   }
 }

@@ -16,7 +16,7 @@ console.log('.env file exists:', fs.existsSync(path.resolve(__dirname, '../.env'
 const dbName = process.env.DB_NAME || 'Projeto3';
 const dbUser = process.env.DB_USER || 'postgres';
 const dbPassword = process.env.DB_PASS || '55rato66';
-const dbHost = process.env.DB_HOST || 'localhost';
+const dbHost = process.env.DB_HOST || 'dpg-d1pcvimr433s73d942t0-a.frankfurt-postgres.render.com';
 
 console.log('Using connection parameters:', { dbName, dbUser, passwordLength: dbPassword ? dbPassword.length : 0, dbHost });
 

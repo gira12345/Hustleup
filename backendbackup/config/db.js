@@ -40,7 +40,7 @@ if (process.env.DATABASE_URL) {
     database: process.env.DB_NAME || 'Projeto3',
     username: process.env.DB_USER || 'postgres',
     password: process.env.DB_PASSWORD || '55rato66',
-    host: process.env.DB_HOST || 'localhost',
+    host: process.env.DB_HOST || 'dpg-d1pcvimr433s73d942t0-a.frankfurt-postgres.render.com',
     dialect: 'postgres',
     logging: false
   };

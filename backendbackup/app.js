@@ -6,10 +6,10 @@ const path = require('path');
 const app = express();
 
 const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:5173',
-  'https://hustleup-frontend.onrender.com' // URL real do frontend
-];
+  'https://hustleup-frontend.onrender.com',
+  process.env.FRONTEND_URL,
+  ...(process.env.NODE_ENV !== 'production' ? ['http://localhost:3000', 'http://localhost:5173'] : [])
+].filter(Boolean);
 
 
 app.use(cors({

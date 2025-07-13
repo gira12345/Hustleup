@@ -12,9 +12,9 @@ const PORT = process.env.PORT || 3001;
 
 // Iniciar servidor
 const server = app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Backend HustleUp operacional em http://localhost:${PORT}`);
-  console.log(`📋 Ambiente: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🔗 API disponível em: http://localhost:${PORT}/api/test`);
+  console.log(`Backend HustleUp operacional na porta ${PORT}`);
+  console.log(`Ambiente: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`API disponível em: /api/test`);
   
   // Testar conexão com BD
   sequelize.authenticate()
