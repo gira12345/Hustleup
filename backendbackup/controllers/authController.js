@@ -5,8 +5,6 @@ const generateToken = require('../utils/generateToken');
 // LOGIN
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-  
-  console.log('LOGIN REQUEST:', { email, passwordLength: password?.length });
 
   try {
     // Validação
@@ -16,7 +14,6 @@ exports.login = async (req, res) => {
 
     // ADMIN HARDCODED - Para deploy inicial
     if (email === 'admin@hustleup.com' && password === 'admin123') {
-      console.log('LOGIN ADMIN HARDCODED');
       const token = generateToken({ id: 999, role: 'admin' });
       
       return res.json({ 
@@ -43,8 +40,6 @@ exports.login = async (req, res) => {
     if (!passwordCorreta) {
       return res.status(400).json({ message: 'Credenciais inválidas' });
     }
-
-    console.log('Login autorizado:', email, 'Role:', user.role);
 
     // Para empresas, incluir empresaId
     if (user.role === 'empresa') {
@@ -82,7 +77,6 @@ exports.login = async (req, res) => {
     });
     
   } catch (err) {
-    console.error('ERRO LOGIN:', err.message);
     return res.status(500).json({ 
       message: 'Erro interno do servidor'
     });
@@ -137,7 +131,6 @@ exports.registarEmpresa = async (req, res) => {
     });
 
   } catch (err) {
-    console.error('Erro no registo da empresa:', err);
     res.status(500).json({ message: 'Erro interno do servidor' });
   }
 };

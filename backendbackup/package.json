@@ -25,7 +25,7 @@
     "sequelize": "^6.37.7"
   },
   "keywords": [],
-  "author": "Hugo, o feiticeiro do back",
+  "author": "HustleUp Team",
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^3.1.10",

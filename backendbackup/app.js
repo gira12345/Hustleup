@@ -68,11 +68,8 @@ app.use('/api/candidaturas', candidaturaRoutes);
 
 app.use('/api/setores', require('./routes/setorRoutes'));
 
-console.log('Backend pronto com todas as rotas!');
-
 // Middleware de erro
 app.use((err, req, res, next) => {
-  console.error('Erro no servidor:', err.stack);
   res.status(500).json({ 
     message: 'Erro interno do servidor',
     error: process.env.NODE_ENV === 'development' ? err.message : undefined

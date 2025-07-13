@@ -1093,10 +1093,9 @@ exports.getEmpresaPorId = async (req, res) => {
   }
 };
 
-// Debug dos pedidos de remoção - para teste
+// Pedidos de remoção
 exports.debugPedidosRemocao = async (req, res) => {
   try {
-    console.log('DEBUG: Verificando pedidos de remoção...');
     
     // Verificar se há dados na tabela
     const todosPedidos = await PedidoRemocao.findAll({
