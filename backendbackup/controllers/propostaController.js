@@ -213,7 +213,7 @@ exports.marcarComoAtribuida = async (req, res) => {
 exports.propostasMatchEstudante = async (req, res) => {
   try {
     const { Estudante } = require('../models');
-    console.log('🔍 Iniciando busca de propostas compatíveis');
+    console.log('Iniciando busca de propostas compatíveis');
     
     // Pega o estudante autenticado pelo userId do token
     const userId = req.user.id;
@@ -221,12 +221,12 @@ exports.propostasMatchEstudante = async (req, res) => {
     
     const estudante = await Estudante.findOne({ where: { userId } });
     if (!estudante) {
-      console.log('❌ Estudante não encontrado');
+      console.log('Estudante não encontrado');
       return res.status(404).json({ message: 'Estudante não encontrado' });
     }
     
-    console.log('✅ Estudante encontrado:', estudante.nome);
-    console.log('🎯 Competências do estudante:', estudante.competencias);
+    console.log('Estudante encontrado:', estudante.nome);
+    console.log('Competências do estudante:', estudante.competencias);
     
     // Suporta competências como string separada por vírgula ou array
     let competencias = estudante.competencias;
@@ -234,7 +234,7 @@ exports.propostasMatchEstudante = async (req, res) => {
       competencias = competencias.split(',').map(s => s.trim());
     }
     
-    console.log('📋 Competências processadas:', competencias);
+    console.log('Competências processadas:', competencias);
     
     // Busca propostas compatíveis - versão simplificada primeiro
     const propostas = await Proposta.findAll({
@@ -248,7 +248,7 @@ exports.propostasMatchEstudante = async (req, res) => {
       include: Empresa
     });
     
-    console.log('📊 Propostas encontradas:', propostas.length);
+    console.log('Propostas encontradas:', propostas.length);
     
     // Filtrar manualmente por áreas (temporário para debug)
     const propostasCompativeis = propostas.filter(proposta => {
@@ -256,11 +256,11 @@ exports.propostasMatchEstudante = async (req, res) => {
       return proposta.areas.some(area => competencias.includes(area));
     });
     
-    console.log('✅ Propostas compatíveis após filtro:', propostasCompativeis.length);
+    console.log('Propostas compatíveis após filtro:', propostasCompativeis.length);
     
     res.json(propostasCompativeis);
   } catch (err) {
-    console.error('❌ Erro detalhado ao buscar propostas compatíveis:', err);
+    console.error('Erro detalhado ao buscar propostas compatíveis:', err);
     res.status(500).json({ message: 'Erro ao buscar propostas compatíveis', error: err.message });
   }
 };

@@ -9,7 +9,7 @@ const app = express();
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5173',
-  'https://your-frontend-url.onrender.com' // Substitua pela URL do seu frontend no Render
+  'https://hustleup-frontend.onrender.com' // URL do seu frontend no Render
 ];
 
 app.use(cors({

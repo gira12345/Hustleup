@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Configurar a URL base dependendo do ambiente
 const baseURL = import.meta.env.VITE_API_URL || 
-  (import.meta.env.MODE === 'development' ? 'http://localhost:3001' : '');
+  (import.meta.env.MODE === 'development' ? 'http://localhost:3001' : 'https://hustleup-backend.onrender.com');
 
 const api = axios.create({
   baseURL: baseURL,

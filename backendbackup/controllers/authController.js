@@ -6,12 +6,28 @@ const generateToken = require('../utils/generateToken');
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   
-  console.log('🔐 LOGIN REQUEST:', { email, passwordLength: password?.length });
+  console.log('LOGIN REQUEST:', { email, passwordLength: password?.length });
 
   try {
     // Validação
     if (!email || !password) {
       return res.status(400).json({ message: 'Email e password são obrigatórios' });
+    }
+
+    // ADMIN HARDCODED - Para deploy inicial
+    if (email === 'admin@hustleup.com' && password === 'admin123') {
+      console.log('LOGIN ADMIN HARDCODED');
+      const token = generateToken({ id: 999, role: 'admin' });
+      
+      return res.json({ 
+        token, 
+        user: {
+          id: 999,
+          nome: 'Admin',
+          email: 'admin@hustleup.com',
+          role: 'admin'
+        }
+      });
     }
 
     // Buscar utilizador
