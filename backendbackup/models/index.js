@@ -1,36 +1,11 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const path = require('path');
-const fs = require('fs');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
-// Verificar se as variáveis de ambiente foram carregadas
-console.log('Verificando variáveis de ambiente:');
-console.log('DB_NAME:', process.env.DB_NAME);
-console.log('DB_USER:', process.env.DB_USER);
-console.log('DB_PASS length:', process.env.DB_PASS ? process.env.DB_PASS.length : 'undefined');
-console.log('DB_HOST:', process.env.DB_HOST);
-console.log('DB_PORT:', process.env.DB_PORT);
-console.log('.env file exists:', fs.existsSync(path.resolve(__dirname, '../.env')));
+// Usar a configuração do db.js
+const sequelize = require('../config/db');
 
-// 🔌 Conexão com a base de dados
-const dbName = process.env.DB_NAME || 'Projeto3';
-const dbUser = process.env.DB_USER || 'postgres';
-const dbPassword = process.env.DB_PASS || '55rato66';
-const dbHost = process.env.DB_HOST || 'dpg-d1pcvimr433s73d942t0-a.frankfurt-postgres.render.com';
-
-console.log('Using connection parameters:', { dbName, dbUser, passwordLength: dbPassword ? dbPassword.length : 0, dbHost });
-
-const sequelize = new Sequelize(
-  dbName,
-  dbUser,
-  dbPassword,
-  {
-    host: dbHost,
-    port: process.env.DB_PORT || 5432,
-    dialect: 'postgres',
-    logging: false,
-  }
-);
+console.log('Sequelize configurado via config/db.js');
 
 // 📦 Objecto base para os modelos
 const db = {};

@@ -77,8 +77,10 @@ exports.login = async (req, res) => {
     });
     
   } catch (err) {
+    console.error('Erro no login:', err);
     return res.status(500).json({ 
-      message: 'Erro interno do servidor'
+      message: 'Erro interno do servidor',
+      error: process.env.NODE_ENV === 'development' ? err.message : undefined
     });
   }
 };
