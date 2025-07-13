@@ -6,7 +6,7 @@ const generateToken = require('../utils/generateToken');
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   
-  console.log('🔐 LOGIN REQUEST:', { email, passwordLength: password?.length });
+  console.log(' LOGIN REQUEST:', { email, passwordLength: password?.length });
 
   try {
     // Validação
@@ -28,7 +28,7 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: 'Credenciais inválidas' });
     }
 
-    console.log('✅ Login autorizado:', email, 'Role:', user.role);
+    console.log(' Login autorizado:', email, 'Role:', user.role);
 
     // Para empresas, incluir empresaId
     if (user.role === 'empresa') {

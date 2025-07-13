@@ -37,6 +37,11 @@ app.get('/api/test', (req, res) => {
   res.json({ message: 'Backend HustleUp funcionando!' });
 });
 
+// Evitar erro 404 do favicon
+app.get('/favicon.ico', (req, res) => {
+  res.status(204).send();
+});
+
 console.log('HustleUp Backend - Iniciando...');
 
 // Carregar rotas
