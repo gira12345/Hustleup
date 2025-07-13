@@ -707,15 +707,15 @@ exports.editarProposta = async (req, res) => {
   }
 };
 
-// Deletar proposta
-exports.deletarProposta = async (req, res) => {
+// Eliminar proposta
+exports.eliminarProposta = async (req, res) => {
   try {
     const proposta = await Proposta.findByPk(req.params.id);
     if (!proposta) return res.status(404).json({ message: 'Proposta não encontrada' });
     await proposta.destroy();
     res.json({ message: 'Proposta deletada com sucesso' });
   } catch (err) {
-    res.status(500).json({ message: 'Erro ao deletar proposta', error: err.message });
+    res.status(500).json({ message: 'Erro ao eliminar proposta', error: err.message });
   }
 };
 

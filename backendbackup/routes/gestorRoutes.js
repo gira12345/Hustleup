@@ -26,10 +26,10 @@ router.put('/propostas/:id', gestorController.editarProposta);
 router.post('/propostas/:id/editar', gestorController.editarPropostaSimples);
 router.patch('/propostas/:id/editar', gestorController.editarPropostaSimples);
 
-// Rotas para validar, reativar e deletar propostas pelo gestor
+// Rotas para validar, reativar e eliminar propostas pelo gestor
 router.post('/propostas/:id/validar', gestorController.validarProposta);
 router.post('/propostas/:id/reativar', gestorController.reativarProposta);
-router.delete('/propostas/:id', gestorController.deletarProposta);
+router.delete('/propostas/:id', gestorController.eliminarProposta);
 // Rota de validação já está implementada acima: /propostas/:id/validar
 
 // Mudar estado da proposta
@@ -43,7 +43,7 @@ router.get('/dashboard', gestorController.dashboard);
 
 // Pedidos de remoção
 router.get('/test-simple', (req, res) => {
-  res.json({ message: 'Rota de teste funcionando!', user: req.user });
+  res.json({ message: 'Rota de teste operacional!', user: req.user });
 });
 router.get('/pedidos-remocao', gestorController.listarPedidosRemocaoNova);
 router.get('/pedidos-remocao/simples', gestorController.listarPedidosRemocaoSimples); // Versão simples

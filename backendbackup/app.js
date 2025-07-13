@@ -34,7 +34,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Rota de teste
 app.get('/api/test', (req, res) => {
-  res.json({ message: 'Backend HustleUp funcionando!' });
+  res.json({ message: 'Backend HustleUp operacional!' });
 });
 
 // Evitar erro 404 do favicon

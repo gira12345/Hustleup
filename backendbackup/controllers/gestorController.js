@@ -527,8 +527,8 @@ exports.reativarProposta = async (req, res) => {
   }
 };
 
-// Permite ao gestor deletar propostas
-exports.deletarProposta = async (req, res) => {
+// Permite ao gestor eliminar propostas
+exports.eliminarProposta = async (req, res) => {
   try {
     const { id } = req.params;
     const proposta = await Proposta.findByPk(id);
@@ -540,7 +540,7 @@ exports.deletarProposta = async (req, res) => {
     await proposta.destroy();
     res.json({ message: 'Proposta deletada com sucesso' });
   } catch (err) {
-    res.status(500).json({ message: 'Erro ao deletar proposta', error: err.message });
+    res.status(500).json({ message: 'Erro ao eliminar proposta', error: err.message });
   }
 };
 
@@ -1231,7 +1231,7 @@ exports.aprovarPedidoRemocaoNova = async (req, res) => {
       // Marcar pedido como aprovado
       await pedido.update({ estado: 'aprovado' });
       
-      // Deletar o usuário estudante
+      // Eliminar o usuário estudante
       if (pedido.Estudante) {
         await User.destroy({ where: { id: pedido.Estudante.id } });
         console.log('[GESTOR - aprovarPedidoRemocaoNova] Usuário removido:', pedido.Estudante.id);

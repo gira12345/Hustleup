@@ -84,7 +84,7 @@ router.get('/propostas/:id', adminController.obterProposta);
 router.get('/propostas/:id/teste', adminController.testeObterProposta); // Rota de teste
 router.post('/propostas', adminController.criarProposta);
 router.put('/propostas/:id', adminController.editarProposta);
-router.delete('/propostas/:id', adminController.deletarProposta);
+router.delete('/propostas/:id', adminController.eliminarProposta);
 
 // Ações específicas das propostas
 router.patch('/propostas/:id/aprovar', adminController.aprovarProposta);
