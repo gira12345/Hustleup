@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../config/axios';
 
 const Registar = () => {
   const [formData, setFormData] = useState({
@@ -52,7 +52,7 @@ const Registar = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('/api/auth/registar-empresa', {
+      const response = await api.post('/api/auth/registar-empresa', {
         nome: formData.nome,
         email: formData.email,
         password: formData.password,

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../config/axios';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -25,9 +25,9 @@ const Login = () => {
     console.log('Dados do login:', { email, senha });
     
     try {
-      const resposta = await axios.post('/api/auth/login', {
+      const resposta = await api.post('/api/auth/login', {
         email,
-        password: senha //  CORREÇÃO: enviar como 'password'
+        password: senha
       });
 
       console.log('Resposta do servidor:', resposta.data);

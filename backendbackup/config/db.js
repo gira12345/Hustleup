@@ -8,17 +8,29 @@ if (process.env.DATABASE_URL) {
   // Produção (Render) - usar DATABASE_URL
   console.log('🔗 Usando DATABASE_URL para produção');
   console.log('DATABASE_URL configurada:', !!process.env.DATABASE_URL);
-  sequelize = new Sequelize(process.env.DATABASE_URL, {
-    dialect: 'postgres',
-    protocol: 'postgres',
-    logging: false,
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false
+  
+  try {
+    sequelize = new Sequelize(process.env.DATABASE_URL, {
+      dialect: 'postgres',
+      protocol: 'postgres',
+      logging: console.log, // Ativar logs para debug
+      dialectOptions: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false
+        }
+      },
+      pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
       }
-    }
-  });
+    });
+    console.log('✅ Sequelize configurado com DATABASE_URL');
+  } catch (error) {
+    console.error('❌ Erro ao configurar Sequelize:', error.message);
+  }
 } else {
   // Desenvolvimento - usar variáveis separadas
   console.log('🔗 Usando configuração individual para desenvolvimento');

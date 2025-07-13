@@ -33,6 +33,9 @@ const server = app.listen(PORT, '0.0.0.0', () => {
     })
     .catch((err) => {
       console.error('❌ Erro na conexão com base de dados:', err.message);
+      console.error('❌ Erro completo:', err);
+      console.error('❌ DATABASE_URL existe:', !!process.env.DATABASE_URL);
+      console.error('❌ NODE_ENV:', process.env.NODE_ENV);
     });
 });
 
