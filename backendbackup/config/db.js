@@ -6,7 +6,7 @@ let sequelize;
 
 if (process.env.DATABASE_URL) {
   // Produção (Render) - usar DATABASE_URL
-  console.log('Using DATABASE_URL for production');
+  console.log('🔗 Usando DATABASE_URL para produção');
   sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: 'postgres',
     protocol: 'postgres',
@@ -20,7 +20,7 @@ if (process.env.DATABASE_URL) {
   });
 } else {
   // Desenvolvimento - usar variáveis separadas
-  console.log('Using individual DB config for development');
+  console.log('🔗 Usando configuração individual para desenvolvimento');
   
   const dbConfig = {
     database: process.env.DB_NAME || 'Projeto3',
@@ -31,11 +31,11 @@ if (process.env.DATABASE_URL) {
     logging: false
   };
 
-  console.log('DB Config (db.js):', {
+  console.log('📋 Configuração da BD:', {
     database: dbConfig.database,
     username: dbConfig.username,
-    passwordProvided: !!dbConfig.password,
-    host: dbConfig.host
+    host: dbConfig.host,
+    passwordProvided: !!dbConfig.password
   });
 
   sequelize = new Sequelize(

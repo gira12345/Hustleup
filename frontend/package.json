@@ -6,8 +6,7 @@
     "dev": "vite --port 3000",
     "build": "vite build",
     "preview": "vite preview --port 3000",
-    "start": "vite preview --port $PORT --host 0.0.0.0",
-    "dev:force": "vite --port 3000 --force"
+    "start": "npm run dev"
   },
   "dependencies": {
     "axios": "^1.6.0",

@@ -1,12 +1,7 @@
-// Configuração global do Axios para o projeto HustleUp
 import axios from 'axios';
 
-// Configurar a URL base dependendo do ambiente
-const baseURL = import.meta.env.VITE_API_URL || 
-  (import.meta.env.MODE === 'production' ? 'https://hustleup-backend.onrender.com' : 'http://localhost:3001');
-
 const api = axios.create({
-  baseURL: baseURL,
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3001',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

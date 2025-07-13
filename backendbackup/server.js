@@ -12,9 +12,15 @@ const PORT = process.env.PORT || 3001;
 
 // Iniciar servidor
 const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Backend HustleUp operacional em http://localhost:${PORT}`);
+  console.log(`📋 Ambiente: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🔗 API disponível em: http://localhost:${PORT}/api/test`);
+  
   // Testar conexão com BD
   sequelize.authenticate()
     .then(() => {
+      console.log('✅ Conexão com base de dados estabelecida');
+      
       // Sincronizar modelos com BD - IMPORTANTE para criar tabelas no Render
       if (process.env.NODE_ENV === 'production') {
         return sequelize.sync({ force: false, alter: true });
@@ -23,18 +29,22 @@ const server = app.listen(PORT, '0.0.0.0', () => {
       }
     })
     .then(() => {
-      // Modelos sincronizados
+      console.log('✅ Modelos sincronizados com a base de dados');
     })
     .catch((err) => {
-      // Erro na conexão
+      console.error('❌ Erro na conexão com base de dados:', err.message);
     });
 });
 
 // Capturar erros
 process.on('uncaughtException', (error) => {
-  // Erro não capturado
+  console.error('❌ Erro não capturado:', error.message);
+  process.exit(1);
 });
 
 process.on('unhandledRejection', (error) => {
-  // Promise rejeitada
+  console.error('❌ Promise rejeitada:', error.message);
+  server.close(() => {
+    process.exit(1);
+  });
 });
