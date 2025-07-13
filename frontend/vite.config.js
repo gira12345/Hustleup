@@ -25,7 +25,9 @@ export default defineConfig({
   preview: {
     host: '0.0.0.0',
     port: process.env.PORT || 4173,
-    allowedHosts: ['hustleup.onrender.com']
+    allowedHosts: ['hustleup.onrender.com'],
+    // Configuração para SPA routing
+    historyApiFallback: true
   },
   build: {
     outDir: 'dist',
