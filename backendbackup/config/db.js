@@ -7,6 +7,7 @@ let sequelize;
 if (process.env.DATABASE_URL) {
   // Produção (Render) - usar DATABASE_URL
   console.log('🔗 Usando DATABASE_URL para produção');
+  console.log('DATABASE_URL configurada:', !!process.env.DATABASE_URL);
   sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: 'postgres',
     protocol: 'postgres',
@@ -21,6 +22,7 @@ if (process.env.DATABASE_URL) {
 } else {
   // Desenvolvimento - usar variáveis separadas
   console.log('🔗 Usando configuração individual para desenvolvimento');
+  console.log('DATABASE_URL não encontrada, usando configuração local');
   
   const dbConfig = {
     database: process.env.DB_NAME || 'Projeto3',
