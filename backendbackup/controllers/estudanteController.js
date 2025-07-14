@@ -87,90 +87,84 @@ exports.getPerfil = async (req, res) => {
 // Editar perfil do estudante
 exports.editarPerfil = async (req, res) => {
   try {
+    console.log('🔧 [editarPerfil] Iniciando edição do perfil para userId:', req.user.id);
+    console.log('🔧 [editarPerfil] Dados recebidos:', JSON.stringify(req.body, null, 2));
+    
+    // Buscar estudante
     const estudante = await Estudante.findOne({ 
-      where: { userId: req.user.id }, 
-      include: [
-        {
-          model: Setor,
-          through: { attributes: [] }
-        },
-        {
-          model: User,
-          attributes: ['id', 'email', 'nome']
-        }
-      ]
+      where: { userId: req.user.id }
     });
-    if (!estudante) return res.status(404).json({ message: 'Estudante não encontrado' });
+    
+    if (!estudante) {
+      console.log('❌ [editarPerfil] Estudante não encontrado');
+      return res.status(404).json({ message: 'Estudante não encontrado' });
+    }
+    
+    console.log('✅ [editarPerfil] Estudante encontrado:', estudante.nome);
 
-    const { nome, curso, competencias, contacto, setores, sobreMim, objetivo, disponibilidade, tipoProjeto,
-      instituicao, anoConclusao, idiomas, linkedin, areasInteresse, descricao, telefone } = req.body;
+    // Apenas campos opcionais para evitar problemas
+    const camposPermitidos = {};
+    
+    // Só adicionar campos se não forem undefined e não forem obrigatórios
+    if (req.body.nome !== undefined) camposPermitidos.nome = req.body.nome;
+    if (req.body.curso !== undefined) camposPermitidos.curso = req.body.curso;
+    if (req.body.competencias !== undefined) camposPermitidos.competencias = req.body.competencias;
+    if (req.body.contacto !== undefined) camposPermitidos.contacto = req.body.contacto;
+    if (req.body.sobreMim !== undefined) camposPermitidos.sobreMim = req.body.sobreMim;
+    if (req.body.objetivo !== undefined) camposPermitidos.objetivo = req.body.objetivo;
+    if (req.body.disponibilidade !== undefined) camposPermitidos.disponibilidade = req.body.disponibilidade;
+    if (req.body.tipoProjeto !== undefined) camposPermitidos.tipoProjeto = req.body.tipoProjeto;
+    if (req.body.instituicao !== undefined) camposPermitidos.instituicao = req.body.instituicao;
+    if (req.body.anoConclusao !== undefined) camposPermitidos.anoConclusao = req.body.anoConclusao;
+    if (req.body.idiomas !== undefined) camposPermitidos.idiomas = req.body.idiomas;
+    if (req.body.linkedin !== undefined) camposPermitidos.linkedin = req.body.linkedin;
+    if (req.body.areasInteresse !== undefined) camposPermitidos.areasInteresse = req.body.areasInteresse;
+    if (req.body.descricao !== undefined) camposPermitidos.descricao = req.body.descricao;
 
-    // Atualiza apenas os campos enviados
-    if (nome !== undefined) estudante.nome = nome;
-    if (curso !== undefined) estudante.curso = curso;
-    if (competencias !== undefined) estudante.competencias = competencias;
-    if (contacto !== undefined) estudante.contacto = contacto;
-    if (sobreMim !== undefined) estudante.sobreMim = sobreMim;
-    if (objetivo !== undefined) estudante.objetivo = objetivo;
-    if (disponibilidade !== undefined) estudante.disponibilidade = disponibilidade;
-    if (tipoProjeto !== undefined) estudante.tipoProjeto = tipoProjeto;
-    if (instituicao !== undefined) estudante.instituicao = instituicao;
-    if (anoConclusao !== undefined) estudante.anoConclusao = anoConclusao;
-    if (idiomas !== undefined) estudante.idiomas = idiomas;
-    if (linkedin !== undefined) estudante.linkedin = linkedin;
-    if (areasInteresse !== undefined) estudante.areasInteresse = areasInteresse;
-    if (descricao !== undefined) estudante.descricao = descricao;
-    if (telefone !== undefined) estudante.telefone = telefone;
+    console.log('💾 [editarPerfil] Campos a atualizar:', Object.keys(camposPermitidos));
 
-    if (req.file) {
-      estudante.foto = `uploads/${req.file.filename}`;
+    if (Object.keys(camposPermitidos).length === 0) {
+      console.log('⚠️ [editarPerfil] Nenhum campo para atualizar');
+      return res.status(400).json({ message: 'Nenhum campo válido para atualizar' });
     }
 
-    await estudante.save();
+    // Atualizar usando update
+    await Estudante.update(camposPermitidos, {
+      where: { userId: req.user.id }
+    });
 
-    // Parse setores se vier como string JSON
-    let setoresParsed = setores;
-    if (typeof setoresParsed === 'string') {
-      try {
-        setoresParsed = JSON.parse(setoresParsed);
-      } catch {
-        setoresParsed = setoresParsed.split(',').map(s => s.trim());
-      }
-    }
+    console.log('✅ [editarPerfil] Estudante atualizado com sucesso');
 
-    // Atualizar setores (array de nomes ou IDs)
-    if (setoresParsed) {
-      let setoresIds = setoresParsed;
-      if (Array.isArray(setoresParsed) && typeof setoresParsed[0] === 'string' && isNaN(Number(setoresParsed[0]))) {
-        const setoresObjs = await Setor.findAll({ where: { nome: setoresParsed } });
-        setoresIds = setoresObjs.map(s => s.id);
-      }
-      const setoresExistentes = await Setor.findAll({ where: { id: setoresIds } });
-      if (setoresExistentes.length !== setoresIds.length) {
-        return res.status(400).json({ message: 'Um ou mais setores não existem.' });
-      }
-      await estudante.setSetors(setoresIds);
-    }
-
-    // Retorna perfil atualizado (com setores)
+    // Buscar estudante atualizado
     const estudanteAtualizado = await Estudante.findOne({
-      where: { userId: req.user.id },
-      include: [
-        {
-          model: Setor,
-          through: { attributes: [] }
-        },
-        {
-          model: User,
-          attributes: ['id', 'email', 'nome']
-        }
-      ]
+      where: { userId: req.user.id }
     });
 
-    res.json({ message: 'Perfil atualizado com sucesso', estudante: estudanteAtualizado });
+    // Buscar dados do user separadamente
+    const user = await User.findByPk(req.user.id, { 
+      attributes: ['id', 'email', 'nome'] 
+    });
+
+    // Retornar resposta
+    const resposta = {
+      message: 'Perfil atualizado com sucesso',
+      estudante: {
+        ...estudanteAtualizado.dataValues,
+        User: user
+      }
+    };
+
+    console.log('✅ [editarPerfil] Retornando resposta');
+    res.json(resposta);
+
   } catch (err) {
-    console.error('Erro ao atualizar perfil:', err); // Adicionado log detalhado
-    res.status(500).json({ message: 'Erro ao atualizar perfil', error: err.message });
+    console.error('❌ [editarPerfil] Erro completo:', err);
+    console.error('❌ [editarPerfil] Stack trace:', err.stack);
+    res.status(500).json({ 
+      message: 'Erro ao atualizar perfil', 
+      error: err.message,
+      details: err.stack 
+    });
   }
 };
 
