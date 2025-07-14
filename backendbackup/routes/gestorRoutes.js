@@ -8,6 +8,9 @@ const checkRole = require('../middleware/checkRole');
 router.use(verifyToken);
 router.use(checkRole('gestor'));
 
+// Perfil do gestor
+router.get('/perfil', gestorController.getPerfil);
+
 // Validar propostas pendentes
 router.get('/propostas/pendentes', gestorController.listarPropostasPendentes);
 router.get('/propostas/departamento/:depId', gestorController.listarPropostasPorDepartamento);

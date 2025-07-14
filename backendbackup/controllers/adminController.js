@@ -255,7 +255,27 @@ exports.criarEstudante = async (req, res) => {
       role: 'estudante' 
     });
     
-    console.log('✅ Utilizador criado:', novoUser.id, novoUser.email);
+    // Criar também o registo na tabela Estudante
+    const estudante = await db.Estudante.create({
+      userId: novoUser.id,
+      nome: novoUser.nome,
+      contacto: novoUser.email,
+      curso: '',
+      competencias: '',
+      sobreMim: '',
+      objetivo: '',
+      disponibilidade: '',
+      tipoProjeto: '',
+      instituicao: '',
+      anoConclusao: null,
+      idiomas: '',
+      linkedin: '',
+      areasInteresse: '',
+      descricao: '',
+      telefone: ''
+    });
+    
+    console.log('✅ Utilizador e estudante criados:', novoUser.id, novoUser.email);
     res.status(201).json({ 
       message: 'Utilizador criado com sucesso!', 
       utilizador: {
@@ -439,16 +459,32 @@ exports.criarGestor = async (req, res) => {
     if (!nome || !email || !password) {
       return res.status(400).json({ message: 'Nome, email e password são obrigatórios.' });
     }
-    const bcrypt = require('bcryptjs');
-    const hash = await bcrypt.hash(password, 10);
+    
+    // Verificar se o email já existe
+    const userExistente = await User.findOne({ where: { email } });
+    if (userExistente) {
+      return res.status(400).json({ message: 'Este email já está registado.' });
+    }
+    
+    // Criar utilizador - o modelo User já faz hash da password
     const gestor = await User.create({
       nome,
       email,
-      password: hash,
+      password: password, // Será hashada pelo hook beforeCreate
       role: 'gestor'
     });
-    res.status(201).json({ message: 'Gestor criado com sucesso', gestor });
+    
+    res.status(201).json({ 
+      message: 'Gestor criado com sucesso', 
+      gestor: {
+        id: gestor.id,
+        nome: gestor.nome,
+        email: gestor.email,
+        role: gestor.role
+      }
+    });
   } catch (err) {
+    console.error('Erro ao criar gestor:', err);
     res.status(500).json({ message: 'Erro ao criar gestor', error: err.message });
   }
 };
@@ -489,15 +525,25 @@ exports.editarGestor = async (req, res) => {
     if (!gestor || gestor.role !== 'gestor') {
       return res.status(404).json({ message: 'Gestor não encontrado.' });
     }
+    
     gestor.nome = nome;
     gestor.email = email;
     if (password) {
-      const bcrypt = require('bcryptjs');
-      gestor.password = await bcrypt.hash(password, 10);
+      gestor.password = password; // Será hashada pelo hook beforeUpdate
     }
     await gestor.save();
-    res.status(200).json({ message: 'Gestor editado com sucesso!', gestor });
+    
+    res.status(200).json({ 
+      message: 'Gestor editado com sucesso!', 
+      gestor: {
+        id: gestor.id,
+        nome: gestor.nome,
+        email: gestor.email,
+        role: gestor.role
+      }
+    });
   } catch (err) {
+    console.error('Erro ao editar gestor:', err);
     res.status(500).json({ message: 'Erro ao editar gestor', error: err.message });
   }
 };

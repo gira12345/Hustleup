@@ -5,18 +5,54 @@ const { Empresa, Estudante, Proposta, PedidoRemocao, User, Setor, EstudanteFavor
 // Obter perfil do estudante
 exports.getPerfil = async (req, res) => {
   try {
-    // req.user.id deve ser o id do utilizador autenticado (do token)
-    const estudante = await Estudante.findOne({
+    console.log('🔍 [getPerfil] Buscando estudante para userId:', req.user.id);
+    
+    // Primeiro, verificar se o user existe
+    const user = await User.findByPk(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'Utilizador não encontrado' });
+    }
+    
+    // Buscar o estudante
+    let estudante = await Estudante.findOne({
       where: { userId: req.user.id },
       include: [Setor]
     });
 
+    // Se não existe registo na tabela Estudante, criar um
     if (!estudante) {
-      return res.status(404).json({ message: 'Estudante não encontrado' });
+      console.log('⚠️ [getPerfil] Estudante não encontrado, criando registo...');
+      estudante = await Estudante.create({
+        userId: req.user.id,
+        nome: user.nome,
+        contacto: user.email,
+        curso: '',
+        competencias: '',
+        sobreMim: '',
+        objetivo: '',
+        disponibilidade: '',
+        tipoProjeto: '',
+        instituicao: '',
+        anoConclusao: null,
+        idiomas: '',
+        linkedin: '',
+        areasInteresse: '',
+        descricao: '',
+        telefone: ''
+      });
+      
+      // Buscar novamente com includes
+      estudante = await Estudante.findOne({
+        where: { userId: req.user.id },
+        include: [Setor]
+      });
     }
+
+    console.log('✅ [getPerfil] Estudante encontrado:', estudante.nome);
     res.json(estudante);
 
   } catch (err) {
+    console.error('❌ [getPerfil] Erro:', err);
     res.status(500).json({ message: 'Erro ao buscar perfil', error: err.message });
   }
 };

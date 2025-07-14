@@ -7,6 +7,8 @@ exports.login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    console.log('🔍 [LOGIN] Tentativa de login:', email);
+    
     // Validação
     if (!email || !password) {
       return res.status(400).json({ message: 'Email e password são obrigatórios' });
@@ -29,17 +31,22 @@ exports.login = async (req, res) => {
 
     // Buscar utilizador
     const user = await User.findOne({ where: { email } });
+    console.log('🔍 [LOGIN] Utilizador encontrado:', user ? user.email : 'Não encontrado');
     
     if (!user) {
       return res.status(400).json({ message: 'Credenciais inválidas' });
     }
 
     // Verificar password
+    console.log('🔍 [LOGIN] Verificando password...');
     const passwordCorreta = await bcrypt.compare(password, user.password);
+    console.log('🔍 [LOGIN] Password correta:', passwordCorreta);
     
     if (!passwordCorreta) {
       return res.status(400).json({ message: 'Credenciais inválidas' });
     }
+
+    console.log('✅ [LOGIN] Login bem-sucedido para:', user.email, 'Role:', user.role);
 
     // Para empresas, incluir empresaId
     if (user.role === 'empresa') {

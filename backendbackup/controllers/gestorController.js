@@ -1,6 +1,30 @@
 const { Op } = require('sequelize');
 const { Empresa, Proposta, Setor, Estudante, PedidoRemocao, Notificacao, Departamento, User } = require('../models');
 
+// Obter perfil do gestor
+exports.getPerfil = async (req, res) => {
+  try {
+    const gestor = await User.findByPk(req.user.id, {
+      attributes: ['id', 'nome', 'email', 'role', 'createdAt']
+    });
+
+    if (!gestor || gestor.role !== 'gestor') {
+      return res.status(404).json({ message: 'Gestor não encontrado' });
+    }
+
+    res.json({
+      id: gestor.id,
+      nome: gestor.nome,
+      email: gestor.email,
+      role: gestor.role,
+      createdAt: gestor.createdAt
+    });
+  } catch (err) {
+    console.error('Erro ao obter perfil do gestor:', err);
+    res.status(500).json({ message: 'Erro ao obter perfil do gestor', error: err.message });
+  }
+};
+
 // Submeter proposta em nome de uma empresa
 exports.submeterPropostaPorEmpresa = async (req, res) => {
   const { empresaId } = req.params;
