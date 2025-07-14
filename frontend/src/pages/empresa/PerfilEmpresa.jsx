@@ -33,7 +33,7 @@ const PerfilEmpresa = () => {
         email: response.data.user?.email || response.data.contacto || '',
         telefone: response.data.contacto || '',
         endereco: response.data.morada || response.data.localizacao || '',
-        setor: response.data.Setors?.[0]?.nome || '',
+        setor: '', // Temporariamente vazio até resolver problema com setores
         descricao: response.data.descricao || '',
         website: response.data.website || ''
       };

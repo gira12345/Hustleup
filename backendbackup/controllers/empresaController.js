@@ -3,17 +3,17 @@ const { Empresa, Proposta, Setor, Departamento, User } = require('../models');
 exports.getPerfil = async (req, res) => {
   try {
     const user = await User.findByPk(req.user.id);
-    if (!user || user.role !== 'empresa') {
+    if (!user) {
+      return res.status(404).json({ message: 'Utilizador não encontrado' });
+    }
+    
+    if (user.role !== 'empresa') {
       return res.status(404).json({ message: 'Utilizador empresa não encontrado' });
     }
     
     let empresa = await Empresa.findOne({
       where: { userId: req.user.id },
       include: [
-        {
-          model: Setor,
-          through: { attributes: [] }
-        },
         {
           model: User,
           as: 'user',
@@ -26,20 +26,17 @@ exports.getPerfil = async (req, res) => {
       empresa = await Empresa.create({
         userId: req.user.id,
         nome: user.nome || 'Empresa',
-        descricao: '',
-        contacto: user.email,
+        descricao: null,
+        contacto: user.email || null,
         validado: true,
-        localizacao: '',
-        morada: ''
+        localizacao: null,
+        morada: null,
+        website: null
       });
       
       empresa = await Empresa.findOne({
         where: { userId: req.user.id },
         include: [
-          {
-            model: Setor,
-            through: { attributes: [] }
-          },
           {
             model: User,
             as: 'user',
@@ -63,7 +60,7 @@ exports.editarPerfil = async (req, res) => {
     const empresa = await Empresa.findOne({ where: { userId: req.user.id } });
     if (!empresa) return res.status(404).json({ message: 'Empresa não encontrada' });
 
-    const { nome, descricao, contacto, setores, localizacao, departamento, contracto, morada, website } = req.body;
+    const { nome, descricao, contacto, localizacao, departamento, contracto, morada, website } = req.body;
 
     empresa.nome = nome || empresa.nome;
     empresa.descricao = descricao || empresa.descricao;
@@ -79,11 +76,6 @@ exports.editarPerfil = async (req, res) => {
     }
 
     await empresa.save();
-
-    // Atualiza setores (associação Many-to-Many)
-    if (setores) {
-      await empresa.setSetors(setores); // espera um array de IDs de setores
-    }
 
     res.json({ message: 'Perfil atualizado com sucesso', empresa });
 

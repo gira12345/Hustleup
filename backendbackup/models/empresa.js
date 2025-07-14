@@ -6,11 +6,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     descricao: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: true
     },
     contacto: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     logo: {
       type: DataTypes.STRING,
