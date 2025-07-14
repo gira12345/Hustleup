@@ -67,14 +67,6 @@ module.exports = (sequelize, DataTypes) => {
       as: 'gestor'
     });
     
-    // Associação para favoritos
-    Proposta.belongsToMany(models.Estudante, {
-      through: 'estudante_favoritos',
-      foreignKey: 'propostaId',
-      otherKey: 'estudanteId',
-      as: 'EstudantesFavoritos',
-      timestamps: false
-    });
   };
 
   return Proposta;
