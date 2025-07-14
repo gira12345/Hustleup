@@ -1296,3 +1296,39 @@ exports.limparTodosEstudantes = async (req, res) => {
   }
 };
 
+// Debug: Verificar estado das empresas
+exports.debugEmpresas = async (req, res) => {
+  try {
+    const empresas = await Empresa.findAll({
+      include: [{
+        model: User,
+        as: 'user',
+        attributes: ['id', 'email', 'role'],
+        required: false
+      }],
+      attributes: ['id', 'nome', 'contacto', 'validado', 'userId']
+    });
+    
+    const debug = empresas.map(empresa => ({
+      id: empresa.id,
+      nome: empresa.nome,
+      contacto: empresa.contacto,
+      validado: empresa.validado,
+      userId: empresa.userId,
+      userEmail: empresa.user?.email || 'SEM USER',
+      temUser: !!empresa.user,
+      status: empresa.validado ? 'VALIDADA' : 'PENDENTE'
+    }));
+    
+    res.json({
+      total: empresas.length,
+      validadas: empresas.filter(e => e.validado).length,
+      pendentes: empresas.filter(e => !e.validado).length,
+      semUser: empresas.filter(e => !e.userId).length,
+      empresas: debug
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Erro ao fazer debug', error: err.message });
+  }
+};
+

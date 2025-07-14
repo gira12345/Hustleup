@@ -107,4 +107,7 @@ router.post('/corrigir/empresas', adminController.corrigirEmpresasSemUser);
 router.post('/corrigir/estudantes', adminController.corrigirEstudantesSemRegisto);
 router.post('/corrigir/gestores', adminController.associarGestoresATodosDepartamentos);
 
+// Debug
+router.get('/debug/empresas', adminController.debugEmpresas);
+
 module.exports = router;
