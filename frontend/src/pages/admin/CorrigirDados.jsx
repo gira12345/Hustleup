@@ -8,7 +8,7 @@ function CorrigirDados() {
   const corrigirEmpresas = async () => {
     setLoading(true);
     try {
-      const response = await api.post('/api/admin/corrigir/empresas');
+      const response = await api.post('/admin/corrigir/empresas');
       setResultados(prev => ({
         ...prev,
         empresas: response.data
@@ -25,7 +25,7 @@ function CorrigirDados() {
   const corrigirEstudantes = async () => {
     setLoading(true);
     try {
-      const response = await api.post('/api/admin/corrigir/estudantes');
+      const response = await api.post('/admin/corrigir/estudantes');
       setResultados(prev => ({
         ...prev,
         estudantes: response.data

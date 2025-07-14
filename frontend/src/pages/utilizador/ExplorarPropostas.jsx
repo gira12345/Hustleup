@@ -15,7 +15,7 @@ function PropostasCompatíveis() {
 
   const fetchPropostas = async () => {
     try {
-      const response = await api.get('/api/estudante/propostas/compativeis');
+      const response = await api.get('/estudante/propostas/compativeis');
       setPropostas(response.data);
     } catch (error) {
       console.error('Erro ao carregar propostas compatíveis:', error);
@@ -24,7 +24,7 @@ function PropostasCompatíveis() {
 
   const fetchFavoritos = async () => {
     try {
-      const response = await api.get('/api/estudante/favoritos');
+      const response = await api.get('/estudante/favoritos');
       setFavoritos(response.data.map((p) => p.id));
     } catch (error) {
       console.error('Erro ao carregar favoritos:', error);

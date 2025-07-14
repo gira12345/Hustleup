@@ -36,7 +36,7 @@ export default function EditarPropostaGestor() {
     };
     const fetchDepartamentos = async () => {
       try {
-        const res = await api.get('/api/gestor/departamentos');
+        const res = await api.get('/gestor/departamentos');
         setDepartamentos(res.data);
       } catch (err) {
         setDepartamentos([]);

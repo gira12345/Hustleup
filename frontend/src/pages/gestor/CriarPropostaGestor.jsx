@@ -47,7 +47,7 @@ function CriarPropostaGestor() {
     setErro(null);
     setSucesso(null);
     try {
-      await api.post('/api/gestor/propostas', formData);
+      await api.post('/gestor/propostas', formData);
       setSucesso('Proposta criada com sucesso!');
       setTimeout(() => navigate('/gestor/propostas'), 1500);
     } catch (err) {
@@ -58,8 +58,8 @@ function CriarPropostaGestor() {
   useEffect(() => {
     // Buscar empresas e departamentos
     Promise.all([
-      api.get('/api/gestor/empresas'),
-      api.get('/api/gestor/departamentos')
+      api.get('/gestor/empresas'),
+      api.get('/gestor/departamentos')
     ]).then(([empresasRes, depRes]) => {
       setEmpresas(empresasRes.data || []);
       setDepartamentos(depRes.data || []);

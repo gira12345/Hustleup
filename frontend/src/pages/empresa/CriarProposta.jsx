@@ -27,7 +27,7 @@ export default function CriarProposta() {
     const carregarDepartamentos = async () => {
       try {
         // Usar o endpoint da empresa para departamentos
-        const res = await api.get('/api/empresa/departamentos');
+        const res = await api.get('/empresa/departamentos');
         
         console.log('Departamentos recebidos:', res.data);
         

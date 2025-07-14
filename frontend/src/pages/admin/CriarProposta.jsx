@@ -25,11 +25,11 @@ export default function CriarProposta() {
 
   useEffect(() => {
     // Buscar departamentos para o dropdown
-    api.get('/api/admin/departamentos')
+    api.get('/admin/departamentos')
       .then(res => setDepartamentos(res.data))
       .catch(() => setDepartamentos([]));
     // Buscar empresas aprovadas para o dropdown
-    api.get('/api/admin/empresas')
+    api.get('/admin/empresas')
       .then(res => setEmpresas((res.data || []).filter(e => e.validado)))
       .catch(() => setEmpresas([]));
   }, []);
@@ -58,7 +58,7 @@ export default function CriarProposta() {
     setErro(null);
     setSucesso(null);
     try {
-      await api.post('/api/admin/propostas', formData);
+      await api.post('/admin/propostas', formData);
       setSucesso('Proposta criada com sucesso!');
       setTimeout(() => navigate('/admin/propostas'), 1500);
     } catch (err) {

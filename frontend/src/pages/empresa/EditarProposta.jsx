@@ -30,7 +30,7 @@ export default function EditarProposta() {
         setLoading(true);
         
         // Carregar departamentos
-        const resDepartamentos = await api.get('/api/empresa/departamentos');
+        const resDepartamentos = await api.get('/empresa/departamentos');
         if (resDepartamentos.data && Array.isArray(resDepartamentos.data)) {
           setDepartamentos(resDepartamentos.data);
         }

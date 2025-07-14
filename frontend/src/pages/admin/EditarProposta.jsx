@@ -25,7 +25,7 @@ export default function EditarProposta() {
 
   useEffect(() => {
     // Buscar departamentos para o dropdown
-    api.get('/api/admin/departamentos')
+    api.get('/admin/departamentos')
       .then(res => setDepartamentos(res.data))
       .catch(() => setDepartamentos([]));
     // Buscar dados da proposta

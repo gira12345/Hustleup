@@ -46,7 +46,7 @@ export default function EditarPropostaGestor() {
     };
     const fetchDepartamentos = async () => {
       try {
-        const res = await api.get('/api/gestor/departamentos');
+        const res = await api.get('/gestor/departamentos');
         setDepartamentos(res.data);
       } catch (err) {
         setDepartamentos([]);
@@ -54,7 +54,7 @@ export default function EditarPropostaGestor() {
     };
     const fetchEmpresas = async () => {
       try {
-        const res = await api.get('/api/gestor/empresas');
+        const res = await api.get('/gestor/empresas');
         setEmpresas((res.data || []).filter(e => e.validado));
       } catch (err) {
         setEmpresas([]);

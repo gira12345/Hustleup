@@ -25,7 +25,7 @@ const CriarUtilizador = () => {
       const token = localStorage.getItem('token');
       console.log('Token:', token);
       
-      const response = await api.post('/api/gestor/utilizadores', { nome, email, password, role }, {
+      const response = await api.post('/gestor/utilizadores', { nome, email, password, role }, {
         headers: { Authorization: `Bearer ${token}` },
       });
       

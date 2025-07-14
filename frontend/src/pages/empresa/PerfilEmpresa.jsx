@@ -23,7 +23,7 @@ const PerfilEmpresa = () => {
   const carregarPerfil = async () => {
     try {
       setLoading(true);
-      const response = await api.get('/api/empresa/perfil');
+      const response = await api.get('/empresa/perfil');
       
       // Mapear dados do backend para o formato esperado pelo frontend
       const perfilData = {
@@ -69,7 +69,7 @@ const PerfilEmpresa = () => {
         website: formData.website
       };
       
-      await api.patch('/api/empresa/perfil', dadosBackend);
+      await api.patch('/empresa/perfil', dadosBackend);
       setPerfil(formData);
       setEditando(false);
       setError('');

@@ -19,7 +19,7 @@ function PerfilUser() {
   const [remocaoLoading, setRemocaoLoading] = useState(false);
 
   useEffect(() => {
-    api.get('/api/estudante/perfil').then((res) => {
+    api.get('/estudante/perfil').then((res) => {
       setPerfil(res.data);
       setFormData(res.data);
     });
@@ -32,7 +32,7 @@ function PerfilUser() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await api.patch('/api/estudante/perfil', formData);
+    await api.patch('/estudante/perfil', formData);
     setEditando(false);
     setPerfil(formData);
   };
@@ -40,7 +40,7 @@ function PerfilUser() {
   const handleRemocao = async () => {
     setRemocaoLoading(true);
     try {
-      const res = await api.post('/api/estudante/remover', {
+      const res = await api.post('/estudante/remover', {
         estudanteId: perfil.id || perfil.estudanteId
       });
       alert(res.data?.message || 'Pedido de remoção enviado com sucesso!');
