@@ -17,12 +17,26 @@ function PerfilUser() {
     descricao: ''
   });
   const [remocaoLoading, setRemocaoLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    api.get('/estudante/perfil').then((res) => {
-      setPerfil(res.data);
-      setFormData(res.data);
-    });
+    const carregarPerfil = async () => {
+      try {
+        setLoading(true);
+        setError('');
+        const res = await api.get('/estudante/perfil');
+        setPerfil(res.data);
+        setFormData(res.data);
+      } catch (err) {
+        console.error('Erro ao carregar perfil:', err);
+        setError('Erro ao carregar perfil do utilizador');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    carregarPerfil();
   }, []);
 
   const handleInputChange = (e) => {
@@ -32,9 +46,14 @@ function PerfilUser() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await api.patch('/estudante/perfil', formData);
-    setEditando(false);
-    setPerfil(formData);
+    try {
+      await api.patch('/estudante/perfil', formData);
+      setEditando(false);
+      setPerfil(formData);
+    } catch (err) {
+      console.error('Erro ao atualizar perfil:', err);
+      alert('Erro ao atualizar perfil. Tente novamente.');
+    }
   };
 
   const handleRemocao = async () => {
@@ -58,11 +77,37 @@ function PerfilUser() {
     setRemocaoLoading(false);
   };
 
-  if (!perfil) return (
+  if (loading) return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-xl p-6 border border-gray-200">
           <p className="text-center text-gray-600">A carregar perfil...</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  if (error) return (
+    <div className="min-h-screen bg-gray-100 p-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <p className="text-center text-red-600">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 block mx-auto"
+          >
+            Tentar novamente
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  if (!perfil) return (
+    <div className="min-h-screen bg-gray-100 p-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <p className="text-center text-gray-600">Perfil não encontrado</p>
         </div>
       </div>
     </div>
