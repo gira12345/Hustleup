@@ -7,6 +7,8 @@ const app = express();
 
 const allowedOrigins = [
   'https://hustleup-frontend.onrender.com',
+  'http://localhost:5173',
+  'http://localhost:3000',
   process.env.FRONTEND_URL
 ].filter(Boolean);
 
