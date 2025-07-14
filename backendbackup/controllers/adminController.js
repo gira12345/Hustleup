@@ -1035,3 +1035,116 @@ exports.obterEmpresa = async (req, res) => {
   }
 };
 
+// Função para corrigir empresas criadas sem User
+exports.corrigirEmpresasSemUser = async (req, res) => {
+  try {
+    console.log('🔧 [corrigirEmpresasSemUser] Iniciando correção...');
+    
+    // Buscar empresas sem userId
+    const empresasSemUser = await Empresa.findAll({
+      where: { userId: null }
+    });
+    
+    console.log('🔍 Encontradas', empresasSemUser.length, 'empresas sem User');
+    
+    let corrigidas = 0;
+    for (const empresa of empresasSemUser) {
+      // Verificar se já existe um User com este email
+      const userExistente = await User.findOne({ 
+        where: { email: empresa.contacto } 
+      });
+      
+      if (!userExistente) {
+        // Criar User para esta empresa
+        const novoUser = await User.create({
+          nome: empresa.nome,
+          email: empresa.contacto,
+          password: 'empresa123', // Password padrão
+          role: 'empresa'
+        });
+        
+        // Atualizar empresa com userId
+        empresa.userId = novoUser.id;
+        empresa.validado = true;
+        await empresa.save();
+        
+        corrigidas++;
+        console.log('✅ Corrigida empresa:', empresa.nome);
+      }
+    }
+    
+    res.json({
+      message: `Correção concluída. ${corrigidas} empresas corrigidas.`,
+      empresasCorrigidas: corrigidas,
+      totalEmpresas: empresasSemUser.length
+    });
+    
+  } catch (err) {
+    console.error('❌ Erro na correção:', err);
+    res.status(500).json({ 
+      message: 'Erro ao corrigir empresas', 
+      error: err.message 
+    });
+  }
+};
+
+// Função para corrigir estudantes sem registo na tabela Estudante
+exports.corrigirEstudantesSemRegisto = async (req, res) => {
+  try {
+    console.log('🔧 [corrigirEstudantesSemRegisto] Iniciando correção...');
+    
+    // Buscar Users estudantes
+    const usersEstudantes = await User.findAll({
+      where: { role: 'estudante' }
+    });
+    
+    console.log('🔍 Encontrados', usersEstudantes.length, 'users estudantes');
+    
+    let corrigidos = 0;
+    for (const user of usersEstudantes) {
+      // Verificar se já existe registo na tabela Estudante
+      const estudanteExistente = await db.Estudante.findOne({
+        where: { userId: user.id }
+      });
+      
+      if (!estudanteExistente) {
+        // Criar registo na tabela Estudante
+        await db.Estudante.create({
+          userId: user.id,
+          nome: user.nome,
+          contacto: user.email,
+          curso: '',
+          competencias: '',
+          sobreMim: '',
+          objetivo: '',
+          disponibilidade: '',
+          tipoProjeto: '',
+          instituicao: '',
+          anoConclusao: null,
+          idiomas: '',
+          linkedin: '',
+          areasInteresse: '',
+          descricao: '',
+          telefone: ''
+        });
+        
+        corrigidos++;
+        console.log('✅ Corrigido estudante:', user.nome);
+      }
+    }
+    
+    res.json({
+      message: `Correção concluída. ${corrigidos} estudantes corrigidos.`,
+      estudantesCorrigidos: corrigidos,
+      totalEstudantes: usersEstudantes.length
+    });
+    
+  } catch (err) {
+    console.error('❌ Erro na correção:', err);
+    res.status(500).json({ 
+      message: 'Erro ao corrigir estudantes', 
+      error: err.message 
+    });
+  }
+};
+

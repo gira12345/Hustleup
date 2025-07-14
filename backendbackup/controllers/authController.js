@@ -50,10 +50,35 @@ exports.login = async (req, res) => {
 
     // Para empresas, incluir empresaId
     if (user.role === 'empresa') {
-      const empresa = await Empresa.findOne({ where: { userId: user.id } });
+      let empresa = await Empresa.findOne({ where: { userId: user.id } });
       
+      // Se não encontrar empresa por userId, tentar por email
       if (!empresa) {
-        return res.status(400).json({ message: 'Empresa não encontrada' });
+        console.log('⚠️ [LOGIN] Empresa não encontrada por userId, tentando por email...');
+        empresa = await Empresa.findOne({ where: { contacto: user.email } });
+        
+        // Se encontrar por email, atualizar com userId
+        if (empresa && !empresa.userId) {
+          empresa.userId = user.id;
+          empresa.validado = true;
+          await empresa.save();
+          console.log('✅ [LOGIN] Empresa corrigida:', empresa.nome);
+        }
+      }
+      
+      // Se ainda não existe, criar registo na tabela Empresa
+      if (!empresa) {
+        console.log('⚠️ [LOGIN] Criando registo de empresa...');
+        empresa = await Empresa.create({
+          userId: user.id,
+          nome: user.nome,
+          descricao: '',
+          contacto: user.email,
+          validado: true,
+          localizacao: '',
+          morada: ''
+        });
+        console.log('✅ [LOGIN] Empresa criada:', empresa.nome);
       }
       
       const token = generateToken({ id: user.id, role: user.role, empresaId: empresa.id });

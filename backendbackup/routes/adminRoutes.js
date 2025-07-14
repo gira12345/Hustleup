@@ -102,4 +102,8 @@ router.get('/kpi/empresas', adminController.getKPIEmpresas);
 router.get('/kpi/propostas', adminController.getKPIPropostas);
 router.get('/kpi/departamentos', adminController.getKPIDepartamentos);
 
+// Rotas de correção/migração
+router.post('/corrigir/empresas', adminController.corrigirEmpresasSemUser);
+router.post('/corrigir/estudantes', adminController.corrigirEstudantesSemRegisto);
+
 module.exports = router;
