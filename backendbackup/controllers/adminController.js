@@ -1048,19 +1048,21 @@ exports.criarEmpresa = async (req, res) => {
       return res.status(400).json({ message: 'Nome e email são obrigatórios.' });
     }
 
+    if (!password) {
+      return res.status(400).json({ message: 'Password é obrigatória.' });
+    }
+
     // Verificar se o email já existe
     const userExistente = await User.findOne({ where: { email } });
     if (userExistente) {
       return res.status(400).json({ message: 'Este email já está registado.' });
     }
 
-    // Sempre criar utilizador e empresa (mesmo que password não seja fornecida)
-    const senhaFinal = password || 'empresa123'; // Password padrão se não fornecida
-    
+    // Criar utilizador com a password fornecida
     const novoUser = await User.create({
       nome,
       email,
-      password: senhaFinal, // Será hashada pelo modelo
+      password: password, // Será hashada pelo modelo
       role: 'empresa'
     });
 
@@ -1080,8 +1082,7 @@ exports.criarEmpresa = async (req, res) => {
         id: empresa.id,
         nome: empresa.nome,
         email: novoUser.email,
-        validado: empresa.validado,
-        passwordGerada: !password ? 'empresa123' : undefined
+        validado: empresa.validado
       }
     });
 
