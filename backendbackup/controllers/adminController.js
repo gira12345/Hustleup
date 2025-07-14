@@ -455,7 +455,7 @@ exports.desativarEmpresa = async (req, res) => {
 // Criar gestor (apenas admin)
 exports.criarGestor = async (req, res) => {
   try {
-    const { nome, email, password } = req.body;
+    const { nome, email, password, departamentos } = req.body;
     if (!nome || !email || !password) {
       return res.status(400).json({ message: 'Nome, email e password são obrigatórios.' });
     }
@@ -474,6 +474,17 @@ exports.criarGestor = async (req, res) => {
       role: 'gestor'
     });
     
+    // Se foram fornecidos departamentos, associar o gestor
+    if (departamentos && Array.isArray(departamentos) && departamentos.length > 0) {
+      const { GestorDepartamento } = require('../models');
+      for (const depId of departamentos) {
+        await GestorDepartamento.create({
+          gestorId: gestor.id,
+          departamentoId: depId
+        });
+      }
+    }
+    
     res.status(201).json({ 
       message: 'Gestor criado com sucesso', 
       gestor: {
@@ -481,7 +492,8 @@ exports.criarGestor = async (req, res) => {
         nome: gestor.nome,
         email: gestor.email,
         role: gestor.role
-      }
+      },
+      departamentosAssociados: departamentos ? departamentos.length : 0
     });
   } catch (err) {
     console.error('Erro ao criar gestor:', err);
@@ -671,6 +683,60 @@ exports.associarDepartamentosGestor = async (req, res) => {
   } catch (err) {
     console.error('Erro ao associar departamentos:', err);
     res.status(500).json({ message: 'Erro ao associar departamentos', error: err.message });
+  }
+};
+
+// Função para associar gestores a todos os departamentos
+exports.associarGestoresATodosDepartamentos = async (req, res) => {
+  try {
+    console.log('🔧 [associarGestoresATodosDepartamentos] Iniciando...');
+    
+    // Buscar todos os gestores
+    const gestores = await User.findAll({
+      where: { role: 'gestor' }
+    });
+    
+    // Buscar todos os departamentos
+    const departamentos = await db.Departamento.findAll();
+    
+    console.log('🔍 Encontrados', gestores.length, 'gestores e', departamentos.length, 'departamentos');
+    
+    const { GestorDepartamento } = require('../models');
+    let associacoesCriadas = 0;
+    
+    for (const gestor of gestores) {
+      for (const departamento of departamentos) {
+        // Verificar se já existe associação
+        const existente = await GestorDepartamento.findOne({
+          where: {
+            gestorId: gestor.id,
+            departamentoId: departamento.id
+          }
+        });
+        
+        if (!existente) {
+          await GestorDepartamento.create({
+            gestorId: gestor.id,
+            departamentoId: departamento.id
+          });
+          associacoesCriadas++;
+        }
+      }
+    }
+    
+    res.json({
+      message: `Associação concluída. ${associacoesCriadas} associações criadas.`,
+      gestores: gestores.length,
+      departamentos: departamentos.length,
+      associacoesCriadas: associacoesCriadas
+    });
+    
+  } catch (err) {
+    console.error('❌ Erro na associação:', err);
+    res.status(500).json({ 
+      message: 'Erro ao associar gestores', 
+      error: err.message 
+    });
   }
 };
 
@@ -1143,6 +1209,86 @@ exports.corrigirEstudantesSemRegisto = async (req, res) => {
     console.error('❌ Erro na correção:', err);
     res.status(500).json({ 
       message: 'Erro ao corrigir estudantes', 
+      error: err.message 
+    });
+  }
+};
+
+// Função para limpar todas as empresas e utilizadores empresa
+exports.limparTodasEmpresas = async (req, res) => {
+  try {
+    console.log('🗑️ [limparTodasEmpresas] Iniciando limpeza...');
+    
+    // 1. Buscar todos os utilizadores empresa
+    const usersEmpresa = await User.findAll({
+      where: { role: 'empresa' }
+    });
+    
+    console.log('🔍 Encontrados', usersEmpresa.length, 'utilizadores empresa');
+    
+    // 2. Apagar registos na tabela Empresa
+    await Empresa.destroy({
+      where: {},
+      truncate: true
+    });
+    
+    // 3. Apagar utilizadores empresa
+    await User.destroy({
+      where: { role: 'empresa' }
+    });
+    
+    console.log('✅ [limparTodasEmpresas] Limpeza concluída');
+    
+    res.json({
+      message: `Limpeza concluída. ${usersEmpresa.length} empresas removidas.`,
+      empresasRemovidas: usersEmpresa.length,
+      status: 'Agora pode criar empresas novamente'
+    });
+    
+  } catch (err) {
+    console.error('❌ Erro na limpeza:', err);
+    res.status(500).json({ 
+      message: 'Erro ao limpar empresas', 
+      error: err.message 
+    });
+  }
+};
+
+// Função para limpar todos os estudantes e utilizadores estudante
+exports.limparTodosEstudantes = async (req, res) => {
+  try {
+    console.log('🗑️ [limparTodosEstudantes] Iniciando limpeza...');
+    
+    // 1. Buscar todos os utilizadores estudante
+    const usersEstudante = await User.findAll({
+      where: { role: 'estudante' }
+    });
+    
+    console.log('🔍 Encontrados', usersEstudante.length, 'utilizadores estudante');
+    
+    // 2. Apagar registos na tabela Estudante
+    await db.Estudante.destroy({
+      where: {},
+      truncate: true
+    });
+    
+    // 3. Apagar utilizadores estudante
+    await User.destroy({
+      where: { role: 'estudante' }
+    });
+    
+    console.log('✅ [limparTodosEstudantes] Limpeza concluída');
+    
+    res.json({
+      message: `Limpeza concluída. ${usersEstudante.length} estudantes removidos.`,
+      estudantesRemovidos: usersEstudante.length,
+      status: 'Agora pode criar estudantes novamente'
+    });
+    
+  } catch (err) {
+    console.error('❌ Erro na limpeza:', err);
+    res.status(500).json({ 
+      message: 'Erro ao limpar estudantes', 
       error: err.message 
     });
   }
