@@ -1,11 +1,7 @@
 const { Empresa, Proposta, Setor, Departamento, User } = require('../models');
 
-// Ver perfil da empresa
 exports.getPerfil = async (req, res) => {
   try {
-    console.log('🔍 [getPerfil] Buscando empresa para userId:', req.user.id);
-    
-    // Primeiro, verificar se o user existe
     const user = await User.findByPk(req.user.id);
     if (!user || user.role !== 'empresa') {
       return res.status(404).json({ message: 'Utilizador empresa não encontrado' });
@@ -16,7 +12,7 @@ exports.getPerfil = async (req, res) => {
       include: [
         {
           model: Setor,
-          through: { attributes: [] } // Não incluir atributos da tabela intermediária
+          through: { attributes: [] }
         },
         {
           model: User,
@@ -26,9 +22,7 @@ exports.getPerfil = async (req, res) => {
       ]
     });
 
-    // Se não existe registo na tabela Empresa, criar um básico
     if (!empresa) {
-      console.log('⚠️ [getPerfil] Empresa não encontrada, criando registo...');
       empresa = await Empresa.create({
         userId: req.user.id,
         nome: user.nome || 'Empresa',
@@ -39,7 +33,6 @@ exports.getPerfil = async (req, res) => {
         morada: ''
       });
       
-      // Buscar novamente com includes
       empresa = await Empresa.findOne({
         where: { userId: req.user.id },
         include: [
@@ -56,11 +49,10 @@ exports.getPerfil = async (req, res) => {
       });
     }
 
-    console.log('✅ [getPerfil] Empresa encontrada:', empresa.nome);
     res.json(empresa);
 
   } catch (err) {
-    console.error('❌ [getPerfil] Erro:', err);
+    console.error('Erro ao obter perfil da empresa:', err);
     res.status(500).json({ message: 'Erro ao obter perfil da empresa', error: err.message });
   }
 };

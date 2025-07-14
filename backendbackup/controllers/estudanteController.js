@@ -2,30 +2,18 @@ const db = require('../models');
 const { Op } = require('sequelize');
 const { Empresa, Estudante, Proposta, PedidoRemocao, User, Setor, EstudanteFavorito } = db;
 
-// Obter perfil do estudante
 exports.getPerfil = async (req, res) => {
   try {
-    console.log('🔍 [getPerfil] Buscando estudante para userId:', req.user.id);
-    console.log('🔍 [getPerfil] User data from token:', req.user);
-    
-    // Primeiro, verificar se o user existe
     const user = await User.findByPk(req.user.id);
     if (!user) {
-      console.log('❌ [getPerfil] User não encontrado no banco');
       return res.status(404).json({ message: 'Utilizador não encontrado' });
     }
     
-    console.log('✅ [getPerfil] User encontrado:', user.nome, user.email);
-    
-    // Buscar o estudante sem includes primeiro para debug
     let estudante = await Estudante.findOne({
       where: { userId: req.user.id }
     });
 
-    console.log('🔍 [getPerfil] Estudante encontrado (sem includes):', estudante ? 'SIM' : 'NÃO');
-
     if (!estudante) {
-      console.log('⚠️ [getPerfil] Estudante não encontrado, criando registo...');
       estudante = await Estudante.create({
         userId: req.user.id,
         nome: user.nome,
@@ -43,10 +31,8 @@ exports.getPerfil = async (req, res) => {
         areasInteresse: '',
         descricao: ''
       });
-      console.log('✅ [getPerfil] Estudante criado com sucesso');
     }
 
-    // Agora buscar com includes
     try {
       estudante = await Estudante.findOne({
         where: { userId: req.user.id },
@@ -62,50 +48,35 @@ exports.getPerfil = async (req, res) => {
           }
         ]
       });
-      console.log('✅ [getPerfil] Estudante com includes encontrado');
     } catch (includeError) {
-      console.log('❌ [getPerfil] Erro com includes:', includeError.message);
-      // Fallback sem includes
       estudante = await Estudante.findOne({
         where: { userId: req.user.id }
       });
-      // Adicionar dados do user manualmente
       if (estudante) {
         estudante.dataValues.User = user;
       }
     }
 
-    console.log('✅ [getPerfil] Retornando estudante:', estudante.nome);
     res.json(estudante);
 
   } catch (err) {
-    console.error('❌ [getPerfil] Erro completo:', err);
+    console.error('Erro ao buscar perfil:', err);
     res.status(500).json({ message: 'Erro ao buscar perfil', error: err.message });
   }
 };
 
-// Editar perfil do estudante
 exports.editarPerfil = async (req, res) => {
   try {
-    console.log('🔧 [editarPerfil] Iniciando edição do perfil para userId:', req.user.id);
-    console.log('🔧 [editarPerfil] Dados recebidos:', JSON.stringify(req.body, null, 2));
-    
-    // Buscar estudante
     const estudante = await Estudante.findOne({ 
       where: { userId: req.user.id }
     });
     
     if (!estudante) {
-      console.log('❌ [editarPerfil] Estudante não encontrado');
       return res.status(404).json({ message: 'Estudante não encontrado' });
     }
-    
-    console.log('✅ [editarPerfil] Estudante encontrado:', estudante.nome);
 
-    // Apenas campos opcionais para evitar problemas
     const camposPermitidos = {};
     
-    // Só adicionar campos se não forem undefined e não forem obrigatórios
     if (req.body.nome !== undefined) camposPermitidos.nome = req.body.nome;
     if (req.body.curso !== undefined) camposPermitidos.curso = req.body.curso;
     if (req.body.competencias !== undefined) camposPermitidos.competencias = req.body.competencias;
@@ -121,31 +92,22 @@ exports.editarPerfil = async (req, res) => {
     if (req.body.areasInteresse !== undefined) camposPermitidos.areasInteresse = req.body.areasInteresse;
     if (req.body.descricao !== undefined) camposPermitidos.descricao = req.body.descricao;
 
-    console.log('💾 [editarPerfil] Campos a atualizar:', Object.keys(camposPermitidos));
-
     if (Object.keys(camposPermitidos).length === 0) {
-      console.log('⚠️ [editarPerfil] Nenhum campo para atualizar');
       return res.status(400).json({ message: 'Nenhum campo válido para atualizar' });
     }
 
-    // Atualizar usando update
     await Estudante.update(camposPermitidos, {
       where: { userId: req.user.id }
     });
 
-    console.log('✅ [editarPerfil] Estudante atualizado com sucesso');
-
-    // Buscar estudante atualizado
     const estudanteAtualizado = await Estudante.findOne({
       where: { userId: req.user.id }
     });
 
-    // Buscar dados do user separadamente
     const user = await User.findByPk(req.user.id, { 
       attributes: ['id', 'email', 'nome'] 
     });
 
-    // Retornar resposta
     const resposta = {
       message: 'Perfil atualizado com sucesso',
       estudante: {
@@ -154,16 +116,13 @@ exports.editarPerfil = async (req, res) => {
       }
     };
 
-    console.log('✅ [editarPerfil] Retornando resposta');
     res.json(resposta);
 
   } catch (err) {
-    console.error('❌ [editarPerfil] Erro completo:', err);
-    console.error('❌ [editarPerfil] Stack trace:', err.stack);
+    console.error('Erro ao atualizar perfil:', err);
     res.status(500).json({ 
       message: 'Erro ao atualizar perfil', 
-      error: err.message,
-      details: err.stack 
+      error: err.message
     });
   }
 };
@@ -171,28 +130,18 @@ exports.editarPerfil = async (req, res) => {
 // Ver propostas compatíveis (por competências)
 exports.getPropostasMatch = async (req, res) => {
   try {
-    console.log('=== INICIO getPropostasMatch ===');
-    console.log('User ID:', req.user.id);
-    
     const estudante = await Estudante.findOne({
       where: { userId: req.user.id }
     });
 
     if (!estudante) {
-      console.log('Estudante não encontrado para userId:', req.user.id);
       return res.status(404).json({ message: 'Estudante não encontrado' });
     }
-
-    console.log('Estudante encontrado:', estudante.nome);
-    console.log('Competências do estudante:', estudante.competencias);
 
     // Obter competências do estudante
     const competenciasEstudante = estudante.competencias ? estudante.competencias.split(',').map(c => c.trim().toLowerCase()) : [];
 
-    console.log('Competências processadas:', competenciasEstudante);
-
     if (competenciasEstudante.length === 0) {
-      console.log('Estudante não tem competências definidas');
       return res.json([]);
     }
 
@@ -208,8 +157,6 @@ exports.getPropostasMatch = async (req, res) => {
         }
       ]
     });
-
-    console.log('Propostas ativas encontradas:', propostas.length);
 
     // Filtrar propostas que têm pelo menos uma competência em comum
     const propostasCompativeis = propostas.filter(proposta => {
@@ -229,19 +176,8 @@ exports.getPropostasMatch = async (req, res) => {
         )
       );
       
-      const isMatch = matchExato || matchParcial;
-      
-      if (isMatch) {
-        console.log(`Match encontrado: ${proposta.nome}`);
-        console.log(`  Competências proposta: [${competenciasProposta.join(', ')}]`);
-        console.log(`  Match exato: ${matchExato}, Match parcial: ${matchParcial}`);
-      }
-      
-      return isMatch;
+      return matchExato || matchParcial;
     });
-
-    console.log('Propostas compatíveis encontradas:', propostasCompativeis.length);
-    console.log('=== FIM getPropostasMatch ===');
 
     res.json(propostasCompativeis);
 

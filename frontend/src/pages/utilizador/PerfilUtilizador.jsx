@@ -223,7 +223,7 @@ function PerfilUser() {
                   value={formData.competencias}
                   onChange={handleInputChange}
                   required
-                  placeholder="Liste as suas competências principais"
+                  placeholder="Descreva as suas competências técnicas e soft skills para destacar o seu perfil profissional"
                 />
               </Form.Group>
               
@@ -274,9 +274,6 @@ function PerfilUser() {
           size="sm"
           onClick={() => setEditando(true)}
         >
-          <svg className="w-4 h-4 me-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-          </svg>
           Editar
         </Button>
       </div>
@@ -315,7 +312,12 @@ function PerfilUser() {
         <Col md={6}>
           <div className="mb-3">
             <strong className="text-muted">Competências:</strong>
-            <p className="mb-0">{perfil?.competencias || 'Não especificado'}</p>
+            <div className="bg-light p-3 rounded mt-2">
+              <small className="text-muted d-block mb-2">
+                <i>Liste as suas competências para que o sistema possa mostrar propostas compatíveis com o seu perfil.</i>
+              </small>
+              <p className="mb-0">{perfil?.competencias || 'Não especificado'}</p>
+            </div>
           </div>
           
           {perfil?.idiomas && (
@@ -340,13 +342,6 @@ function PerfilUser() {
             <div className="mb-3">
               <strong className="text-muted">Sobre Mim:</strong>
               <p className="mb-0">{perfil.descricao}</p>
-            </div>
-          )}
-          
-          {perfil?.areasInteresse && (
-            <div className="mb-3">
-              <strong className="text-muted">Áreas de Interesse:</strong>
-              <p className="mb-0">{perfil.areasInteresse}</p>
             </div>
           )}
         </Col>

@@ -176,27 +176,19 @@ exports.dashboard = async (req, res) => {
 };
 exports.listarEstudantes = async (req, res) => {
   try {
-    console.log('🔍 [listarEstudantes] Iniciando...');
-    
-    // Verificar se os modelos estão disponíveis
     const { User } = require('../models');
     if (!User) {
       throw new Error('Modelo User não encontrado');
     }
-    console.log('✅ [listarEstudantes] Modelo User carregado');
     
-    // Tentar fazer a query
-    console.log('🔍 [listarEstudantes] Fazendo query...');
     const utilizadores = await User.findAll({ 
       where: { role: 'estudante' },
       attributes: ['id', 'nome', 'email', 'role', 'createdAt']
     });
     
-    console.log('✅ [listarEstudantes] Query executada, encontrados:', utilizadores.length, 'utilizadores');
     res.status(200).json({ utilizadores });
   } catch (err) {
-    console.error('❌ [listarEstudantes] Erro:', err);
-    console.error('❌ [listarEstudantes] Stack:', err.stack);
+    console.error('Erro ao listar estudantes:', err);
     res.status(500).json({ 
       message: 'Erro ao listar utilizadores', 
       error: err.message,

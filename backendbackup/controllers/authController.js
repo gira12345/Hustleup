@@ -2,19 +2,15 @@ const bcrypt = require('bcrypt');
 const { User, Empresa, Estudante } = require('../models');
 const generateToken = require('../utils/generateToken');
 
-// LOGIN
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    console.log('🔍 [LOGIN] Tentativa de login:', email);
-    
-    // Validação
     if (!email || !password) {
       return res.status(400).json({ message: 'Email e password são obrigatórios' });
     }
 
-    // ADMIN HARDCODED - Para deploy inicial
+    // Admin hardcoded
     if (email === 'admin@hustleup.com' && password === 'admin123') {
       const token = generateToken({ id: 999, role: 'admin' });
       
@@ -29,51 +25,33 @@ exports.login = async (req, res) => {
       });
     }
 
-    // Buscar utilizador
     const user = await User.findOne({ where: { email } });
-    console.log('🔍 [LOGIN] Utilizador encontrado:', user ? user.email : 'Não encontrado');
     
     if (!user) {
       return res.status(400).json({ message: 'Credenciais inválidas' });
     }
 
-    // Verificar password
-    console.log('🔍 [LOGIN] Verificando password...');
     const passwordCorreta = await bcrypt.compare(password, user.password);
-    console.log('🔍 [LOGIN] Password correta:', passwordCorreta);
     
     if (!passwordCorreta) {
       return res.status(400).json({ message: 'Credenciais inválidas' });
     }
 
-    console.log('✅ [LOGIN] Login bem-sucedido para:', user.email, 'Role:', user.role);
-
-    // Para empresas, incluir empresaId
     if (user.role === 'empresa') {
-      console.log('🏢 [LOGIN] Processando login de empresa:', user.email);
       let empresa = await Empresa.findOne({ where: { userId: user.id } });
       
-      // Se não encontrar empresa por userId, tentar por email
       if (!empresa) {
-        console.log('⚠️ [LOGIN] Empresa não encontrada por userId, tentando por email...');
         empresa = await Empresa.findOne({ where: { contacto: user.email } });
         
-        // Se encontrar por email, atualizar com userId
         if (empresa) {
-          console.log('📋 [LOGIN] Empresa encontrada por email:', empresa.nome, 'validado:', empresa.validado);
           empresa.userId = user.id;
           empresa.validado = true;
           if (!empresa.descricao) empresa.descricao = '';
           await empresa.save();
-          console.log('✅ [LOGIN] Empresa corrigida:', empresa.nome);
         }
-      } else {
-        console.log('📋 [LOGIN] Empresa encontrada por userId:', empresa.nome, 'validado:', empresa.validado);
       }
       
-      // Se ainda não existe, criar registo na tabela Empresa
       if (!empresa) {
-        console.log('⚠️ [LOGIN] Criando registo de empresa...');
         empresa = await Empresa.create({
           userId: user.id,
           nome: user.nome,
@@ -83,18 +61,13 @@ exports.login = async (req, res) => {
           localizacao: '',
           morada: ''
         });
-        console.log('✅ [LOGIN] Empresa criada:', empresa.nome);
       }
       
-      // Verificar se a empresa está validada
       if (!empresa.validado) {
-        console.log('❌ [LOGIN] Empresa não validada:', empresa.nome, 'validado:', empresa.validado);
         return res.status(403).json({ 
           message: 'Empresa ainda não foi validada pelo administrador' 
         });
       }
-      
-      console.log('✅ [LOGIN] Empresa validada, gerando token:', empresa.nome);
       
       const token = generateToken({ id: user.id, role: user.role, empresaId: empresa.id });
       

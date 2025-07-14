@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Form, Button, Card, Alert, Row, Col } from 'react-bootstrap';
 import api from '../../config/axios';
 
 const PerfilEmpresa = () => {
@@ -15,6 +16,7 @@ const PerfilEmpresa = () => {
   const [editando, setEditando] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [sucesso, setSucesso] = useState('');
 
   useEffect(() => {
     carregarPerfil();
