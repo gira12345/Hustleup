@@ -63,7 +63,7 @@ exports.editarPerfil = async (req, res) => {
     const empresa = await Empresa.findOne({ where: { userId: req.user.id } });
     if (!empresa) return res.status(404).json({ message: 'Empresa não encontrada' });
 
-    const { nome, descricao, contacto, setores, localizacao, departamento, contracto, morada } = req.body;
+    const { nome, descricao, contacto, setores, localizacao, departamento, contracto, morada, website } = req.body;
 
     empresa.nome = nome || empresa.nome;
     empresa.descricao = descricao || empresa.descricao;
@@ -72,6 +72,7 @@ exports.editarPerfil = async (req, res) => {
     empresa.departamento = departamento || empresa.departamento;
     empresa.contracto = contracto || empresa.contracto;
     empresa.morada = morada || empresa.morada;
+    empresa.website = website || empresa.website;
 
     if (req.file) {
       empresa.logo = `uploads/${req.file.filename}`;

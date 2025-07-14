@@ -32,6 +32,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true
     },
+    website: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
     validado: {
       type: DataTypes.BOOLEAN,
       defaultValue: false

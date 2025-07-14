@@ -30,9 +30,9 @@ const PerfilEmpresa = () => {
       
       const perfilData = {
         nome: response.data.nome || '',
-        email: response.data.user?.email || '',
+        email: response.data.user?.email || response.data.contacto || '',
         telefone: response.data.contacto || '',
-        endereco: response.data.morada || '',
+        endereco: response.data.morada || response.data.localizacao || '',
         setor: response.data.Setors?.[0]?.nome || '',
         descricao: response.data.descricao || '',
         website: response.data.website || ''
@@ -43,6 +43,18 @@ const PerfilEmpresa = () => {
     } catch (err) {
       console.error('Erro ao carregar perfil:', err);
       setError('Erro ao carregar perfil da empresa');
+      // Definir perfil vazio em caso de erro para evitar problemas de renderização
+      const perfilVazio = {
+        nome: '',
+        email: '',
+        telefone: '',
+        endereco: '',
+        setor: '',
+        descricao: '',
+        website: ''
+      };
+      setPerfil(perfilVazio);
+      setFormData(perfilVazio);
     } finally {
       setLoading(false);
     }
@@ -64,8 +76,7 @@ const PerfilEmpresa = () => {
       
       const dadosBackend = {
         nome: formData.nome,
-        email: formData.email,
-        contacto: formData.telefone,
+        contacto: formData.email, // Email vai para contacto
         morada: formData.endereco,
         descricao: formData.descricao,
         website: formData.website
@@ -96,6 +107,20 @@ const PerfilEmpresa = () => {
     <Card className="shadow-sm border-0 rounded-4 p-4">
       <Alert variant="danger">{error}</Alert>
       <div className="text-center">
+        <Button 
+          onClick={() => window.location.reload()} 
+          variant="primary"
+        >
+          Tentar novamente
+        </Button>
+      </div>
+    </Card>
+  );
+
+  if (!perfil && !loading) return (
+    <Card className="shadow-sm border-0 rounded-4 p-4">
+      <div className="text-center">
+        <p className="text-muted">Perfil não encontrado</p>
         <Button 
           onClick={() => window.location.reload()} 
           variant="primary"
