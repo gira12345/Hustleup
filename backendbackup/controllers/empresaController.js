@@ -7,8 +7,8 @@ exports.getPerfil = async (req, res) => {
     
     // Primeiro, verificar se o user existe
     const user = await User.findByPk(req.user.id);
-    if (!user) {
-      return res.status(404).json({ message: 'Utilizador não encontrado' });
+    if (!user || user.role !== 'empresa') {
+      return res.status(404).json({ message: 'Utilizador empresa não encontrado' });
     }
     
     let empresa = await Empresa.findOne({
@@ -26,8 +26,7 @@ exports.getPerfil = async (req, res) => {
         contacto: user.email,
         validado: true,
         localizacao: '',
-        morada: '',
-        contracto: ''
+        morada: ''
       });
       
       // Buscar novamente com includes

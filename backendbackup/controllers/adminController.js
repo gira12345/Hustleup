@@ -982,29 +982,19 @@ exports.criarEmpresa = async (req, res) => {
       return res.status(400).json({ message: 'Nome e email são obrigatórios.' });
     }
 
-    // Se não foi fornecida password, criar uma empresa sem utilizador (como estava antes)
-    if (!password) {
-      const empresa = await Empresa.create({
-        nome,
-        descricao: descricao || '',
-        contacto: contacto || '',
-        userId: null, 
-        validado: false
-      });
-      return res.status(201).json(empresa);
-    }
-
-    // Se foi fornecida password, criar utilizador e empresa
+    // Verificar se o email já existe
     const userExistente = await User.findOne({ where: { email } });
     if (userExistente) {
       return res.status(400).json({ message: 'Este email já está registado.' });
     }
 
-    // NÃO fazer hash aqui - o modelo User já faz isso no hook beforeCreate
+    // Sempre criar utilizador e empresa (mesmo que password não seja fornecida)
+    const senhaFinal = password || 'empresa123'; // Password padrão se não fornecida
+    
     const novoUser = await User.create({
       nome,
       email,
-      password: password, // Password sem hash - será hashada pelo modelo
+      password: senhaFinal, // Será hashada pelo modelo
       role: 'empresa'
     });
 
@@ -1022,12 +1012,14 @@ exports.criarEmpresa = async (req, res) => {
         id: empresa.id,
         nome: empresa.nome,
         email: novoUser.email,
-        validado: empresa.validado
+        validado: empresa.validado,
+        passwordGerada: !password ? 'empresa123' : undefined
       }
     });
-  } catch (error) {
-    console.error('Erro ao criar empresa:', error);
-    res.status(500).json({ message: 'Erro ao criar empresa', error: error.message });
+
+  } catch (err) {
+    console.error('❌ Erro ao criar empresa:', err);
+    res.status(500).json({ message: 'Erro ao criar empresa', error: err.message });
   }
 };
 
