@@ -155,14 +155,11 @@ exports.registarEmpresa = async (req, res) => {
       return res.status(400).json({ message: 'Este email já está registado.' });
     }
 
-    // Hash da password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Criar utilizador
+    // Criar utilizador (password será hashada automaticamente pelo modelo)
     const novoUser = await User.create({
       nome,
       email,
-      password: hashedPassword,
+      password: password, // Será hashada pelo hook beforeCreate
       role: 'empresa'
     });
 
