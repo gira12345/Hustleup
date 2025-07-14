@@ -125,7 +125,7 @@ export default function Empresas() {
                 empresasFiltradas.map((e) => (
                 <tr key={e.id}>
                   <td className="px-4 py-2">{e.nome}</td>
-                  <td className="px-4 py-2">{e.email}</td>
+                  <td className="px-4 py-2">{e.user?.email || 'Sem email'}</td>
                   <td className="px-4 py-2">{e.contacto}</td>
                   <td className="px-4 py-2">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
