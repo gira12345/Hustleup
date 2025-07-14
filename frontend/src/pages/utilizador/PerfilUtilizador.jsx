@@ -119,7 +119,7 @@ function PerfilUser() {
               </div>
               <div>
                 <span className="font-semibold text-gray-900">Contacto:</span>
-                <p className="text-gray-700 mt-1">{perfil.telefone || perfil.email || '-'}</p>
+                <p className="text-gray-700 mt-1">{perfil.telefone || perfil.contacto || perfil.User?.email || '-'}</p>
               </div>
               <div>
                 <span className="font-semibold text-gray-900">Sobre Mim:</span>

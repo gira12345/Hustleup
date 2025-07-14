@@ -13,10 +13,17 @@ exports.getPerfil = async (req, res) => {
     
     let empresa = await Empresa.findOne({
       where: { userId: req.user.id },
-      include: [{
-        model: Setor,
-        through: { attributes: [] } // Não incluir atributos da tabela intermediária
-      }]
+      include: [
+        {
+          model: Setor,
+          through: { attributes: [] } // Não incluir atributos da tabela intermediária
+        },
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'email', 'nome']
+        }
+      ]
     });
 
     // Se não existe registo na tabela Empresa, criar um básico
@@ -35,10 +42,17 @@ exports.getPerfil = async (req, res) => {
       // Buscar novamente com includes
       empresa = await Empresa.findOne({
         where: { userId: req.user.id },
-        include: [{
-          model: Setor,
-          through: { attributes: [] }
-        }]
+        include: [
+          {
+            model: Setor,
+            through: { attributes: [] }
+          },
+          {
+            model: User,
+            as: 'user',
+            attributes: ['id', 'email', 'nome']
+          }
+        ]
       });
     }
 

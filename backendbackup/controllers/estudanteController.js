@@ -16,10 +16,16 @@ exports.getPerfil = async (req, res) => {
     // Buscar o estudante
     let estudante = await Estudante.findOne({
       where: { userId: req.user.id },
-      include: [{
-        model: Setor,
-        through: { attributes: [] }
-      }]
+      include: [
+        {
+          model: Setor,
+          through: { attributes: [] }
+        },
+        {
+          model: User,
+          attributes: ['id', 'email', 'nome']
+        }
+      ]
     });
 
     // Se não existe registo na tabela Estudante, criar um
@@ -47,10 +53,16 @@ exports.getPerfil = async (req, res) => {
       // Buscar novamente com includes
       estudante = await Estudante.findOne({
         where: { userId: req.user.id },
-        include: [{
-          model: Setor,
-          through: { attributes: [] }
-        }]
+        include: [
+          {
+            model: Setor,
+            through: { attributes: [] }
+          },
+          {
+            model: User,
+            attributes: ['id', 'email', 'nome']
+          }
+        ]
       });
     }
 
@@ -68,10 +80,16 @@ exports.editarPerfil = async (req, res) => {
   try {
     const estudante = await Estudante.findOne({ 
       where: { userId: req.user.id }, 
-      include: [{
-        model: Setor,
-        through: { attributes: [] }
-      }]
+      include: [
+        {
+          model: Setor,
+          through: { attributes: [] }
+        },
+        {
+          model: User,
+          attributes: ['id', 'email', 'nome']
+        }
+      ]
     });
     if (!estudante) return res.status(404).json({ message: 'Estudante não encontrado' });
 
@@ -128,10 +146,16 @@ exports.editarPerfil = async (req, res) => {
     // Retorna perfil atualizado (com setores)
     const estudanteAtualizado = await Estudante.findOne({
       where: { userId: req.user.id },
-      include: [{
-        model: Setor,
-        through: { attributes: [] }
-      }]
+      include: [
+        {
+          model: Setor,
+          through: { attributes: [] }
+        },
+        {
+          model: User,
+          attributes: ['id', 'email', 'nome']
+        }
+      ]
     });
 
     res.json({ message: 'Perfil atualizado com sucesso', estudante: estudanteAtualizado });

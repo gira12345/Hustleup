@@ -28,10 +28,10 @@ const PerfilEmpresa = () => {
       // Mapear dados do backend para o formato esperado pelo frontend
       const perfilData = {
         nome: response.data.nome || '',
-        email: response.data.email || '',
+        email: response.data.user?.email || '',
         telefone: response.data.contacto || '',
         endereco: response.data.morada || '',
-        setor: response.data.Setor?.nome || '',
+        setor: response.data.Setors?.[0]?.nome || '',
         descricao: response.data.descricao || '',
         website: response.data.website || ''
       };
