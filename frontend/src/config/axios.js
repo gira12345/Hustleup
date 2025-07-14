@@ -33,7 +33,11 @@ api.interceptors.response.use(
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       localStorage.removeItem('tipo');
-      window.location.href = '/login';
+      
+      // Usar replace em vez de href para evitar problemas com React Router
+      if (window.location.pathname !== '/login') {
+        window.location.replace('/login');
+      }
     }
     return Promise.reject(error);
   }

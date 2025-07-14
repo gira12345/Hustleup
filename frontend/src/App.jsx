@@ -51,8 +51,25 @@ import VerPropostaUtilizador from './pages/utilizador/VerProposta';
 const ProtectedRoute = ({ children, allowedTypes }) => {
   const token = localStorage.getItem('token');
   let userType = localStorage.getItem('tipo');
+  
+  // Verificar se token existe
+  if (!token) {
+    console.log('ProtectedRoute - No token found');
+    return <Navigate to="/login" replace />;
+  }
+
+  // Verificar se token é válido (básico - não vazio e tem formato)
+  if (token.length < 10 || !token.includes('.')) {
+    console.log('ProtectedRoute - Invalid token format');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('tipo');
+    return <Navigate to="/login" replace />;
+  }
+  
   // Forçar role para minúsculas para evitar problemas de case
   if (userType) userType = userType.toLowerCase();
+  
   // Fallback: se não tiver 'tipo', tentar obter do 'user'
   if (!userType) {
     const user = localStorage.getItem('user');
@@ -60,20 +77,25 @@ const ProtectedRoute = ({ children, allowedTypes }) => {
       try {
         const parsedUser = JSON.parse(user);
         userType = parsedUser.role ? parsedUser.role.toLowerCase() : undefined;
+        // Salvar userType para próxima vez
+        if (userType) {
+          localStorage.setItem('tipo', userType);
+        }
       } catch (e) {
         console.error('Erro ao parsear user do localStorage:', e);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('tipo');
+        return <Navigate to="/login" replace />;
       }
     }
   }
 
   console.log('ProtectedRoute - Token:', !!token, 'UserType:', userType, 'AllowedTypes:', allowedTypes);
 
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
-
-  if (allowedTypes && !allowedTypes.includes(userType)) {
-    console.log('Acesso negado - Tipo não permitido');
+  // Verificar se o tipo de usuário é permitido
+  if (allowedTypes && allowedTypes.length > 0 && !allowedTypes.includes(userType)) {
+    console.log('Acesso negado - Tipo não permitido. UserType:', userType, 'AllowedTypes:', allowedTypes);
     return <Navigate to="/login" replace />;
   }
 

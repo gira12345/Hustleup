@@ -38,14 +38,27 @@ const Login = () => {
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('tipo', user.role); //  CORREÇÃO: adicionar tipo para ProtectedRoute
 
-      console.log(' Login realizado! Navegando para:', user.role);
+      console.log('✅ Login realizado! Navegando para:', user.role);
+      console.log('📋 User data:', user);
+      console.log('🔑 Token salvo:', !!token);
 
       // Navegar baseado no role do utilizador
-      if (user.role === 'admin') navigate('/admin');
-      else if (user.role === 'empresa') navigate('/empresa');
-      else if (user.role === 'estudante') navigate('/utilizador');
-      else if (user.role === 'gestor') navigate('/gestor');
-      else navigate('/dashboard');
+      if (user.role === 'admin') {
+        console.log('🔄 Navegando para /admin');
+        navigate('/admin');
+      } else if (user.role === 'empresa') {
+        console.log('🔄 Navegando para /empresa');
+        navigate('/empresa');
+      } else if (user.role === 'estudante') {
+        console.log('🔄 Navegando para /utilizador');
+        navigate('/utilizador');
+      } else if (user.role === 'gestor') {
+        console.log('🔄 Navegando para /gestor');
+        navigate('/gestor');
+      } else {
+        console.log('⚠️ Role não reconhecido, navegando para /dashboard');
+        navigate('/dashboard');
+      }
       
     } catch (err) {
       console.error(' Erro no login:', err);
