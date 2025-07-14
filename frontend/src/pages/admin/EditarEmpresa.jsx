@@ -24,7 +24,7 @@ export default function EditarEmpresa() {
         const data = res.data;
         setEmpresa({
           nome: data.nome || "",
-          email: data.email || "",
+          email: data.user?.email || "",
           descricao: data.descricao || "",
           contacto: data.contacto || "",
         });

@@ -1094,7 +1094,13 @@ exports.criarEmpresa = async (req, res) => {
 
 exports.obterEmpresa = async (req, res) => {
   try {
-    const empresa = await Empresa.findByPk(req.params.id);
+    const empresa = await Empresa.findByPk(req.params.id, {
+      include: [{
+        model: User,
+        as: 'user',
+        attributes: ['id', 'email', 'role']
+      }]
+    });
     if (!empresa) {
       return res.status(404).json({ message: 'Empresa não encontrada.' });
     }
