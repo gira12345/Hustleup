@@ -5,7 +5,7 @@ console.log('🌍 VITE_API_URL:', import.meta.env.VITE_API_URL);
 console.log('🔗 Fallback URL:', 'https://hustleup-backend.onrender.com/api');
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'https://hustleup-backend.onrender.com/api',
+  baseURL: 'https://hustleup-backend.onrender.com/api',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
