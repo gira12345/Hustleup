@@ -75,7 +75,7 @@ export default function CriarProposta() {
     setSucesso(null);
     
     try {
-      await api.post('/api/empresa/propostas', formData);
+      await api.post('/empresa/propostas', formData);
       setSucesso('Proposta criada com sucesso!');
       setTimeout(() => navigate('/empresa/propostas'), 1500);
     } catch (err) {

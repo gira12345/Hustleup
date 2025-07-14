@@ -50,6 +50,7 @@ exports.login = async (req, res) => {
 
     // Para empresas, incluir empresaId
     if (user.role === 'empresa') {
+      console.log('🏢 [LOGIN] Processando login de empresa:', user.email);
       let empresa = await Empresa.findOne({ where: { userId: user.id } });
       
       // Se não encontrar empresa por userId, tentar por email
@@ -59,12 +60,15 @@ exports.login = async (req, res) => {
         
         // Se encontrar por email, atualizar com userId
         if (empresa) {
+          console.log('📋 [LOGIN] Empresa encontrada por email:', empresa.nome, 'validado:', empresa.validado);
           empresa.userId = user.id;
           empresa.validado = true;
           if (!empresa.descricao) empresa.descricao = '';
           await empresa.save();
           console.log('✅ [LOGIN] Empresa corrigida:', empresa.nome);
         }
+      } else {
+        console.log('📋 [LOGIN] Empresa encontrada por userId:', empresa.nome, 'validado:', empresa.validado);
       }
       
       // Se ainda não existe, criar registo na tabela Empresa
@@ -84,11 +88,13 @@ exports.login = async (req, res) => {
       
       // Verificar se a empresa está validada
       if (!empresa.validado) {
-        console.log('⚠️ [LOGIN] Empresa não validada:', empresa.nome);
+        console.log('❌ [LOGIN] Empresa não validada:', empresa.nome, 'validado:', empresa.validado);
         return res.status(403).json({ 
           message: 'Empresa ainda não foi validada pelo administrador' 
         });
       }
+      
+      console.log('✅ [LOGIN] Empresa validada, gerando token:', empresa.nome);
       
       const token = generateToken({ id: user.id, role: user.role, empresaId: empresa.id });
       
