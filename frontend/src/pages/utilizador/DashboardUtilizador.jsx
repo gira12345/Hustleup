@@ -19,7 +19,7 @@ export default function DashboardUtilizador() {
 
   const carregarPropostas = async () => {
     try {
-      const resPropostas = await api.get("/api/propostas");
+      const resPropostas = await api.get("/propostas");
       setPropostas(resPropostas.data || []);
       
       // Extrair departamentos únicos das próprias propostas (isso garante que os nomes são exatos)
@@ -42,7 +42,7 @@ export default function DashboardUtilizador() {
 
   const carregarFavoritos = async () => {
     try {
-      const res = await api.get("/api/estudante/favoritos");
+      const res = await api.get("/estudante/favoritos");
       setFavoritos(res.data.map((f) => f.id));
     } catch (err) {
       console.error("Erro ao carregar favoritos:", err);
@@ -52,10 +52,10 @@ export default function DashboardUtilizador() {
   const toggleFavorito = async (propostaId) => {
     try {
       if (favoritos.includes(propostaId)) {
-        await api.delete(`/api/estudante/favoritos/${propostaId}`);
+        await api.delete(`/estudante/favoritos/${propostaId}`);
         setFavoritos(favoritos.filter((id) => id !== propostaId));
       } else {
-        await api.post(`/api/estudante/favoritos/${propostaId}`);
+        await api.post(`/estudante/favoritos/${propostaId}`);
         setFavoritos([...favoritos, propostaId]);
       }
     } catch (err) {

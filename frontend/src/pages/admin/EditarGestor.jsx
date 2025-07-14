@@ -18,11 +18,11 @@ export default function EditarGestor() {
 
   useEffect(() => {
     buscarGestor();
-    api.get("/api/admin/departamentos")
+    api.get("/admin/departamentos")
       .then(res => setDepartamentos(res.data))
       .catch(() => setDepartamentos([]));
     // Buscar departamentos já associados ao gestor
-    api.get(`/api/admin/gestores/${id}/departamentos`).then(res => {
+    api.get(`/admin/gestores/${id}/departamentos`).then(res => {
       setDepartamentosSelecionados(res.data.map(dep => dep.id));
     }).catch(() => setDepartamentosSelecionados([]));
   }, []);
@@ -31,7 +31,7 @@ export default function EditarGestor() {
     try {
       setLoading(true);
       setError("");
-      const res = await api.get(`/api/admin/gestores`);
+      const res = await api.get(`/admin/gestores`);
       const gestor = res.data.gestores?.find((g) => g.id === parseInt(id));
       if (gestor) {
         setNome(gestor.nome);
@@ -59,9 +59,9 @@ export default function EditarGestor() {
       setError("");
       const dados = { nome, email };
       if (password.trim()) dados.password = password;
-      await api.put(`/api/admin/gestores/${id}`, dados);
+      await api.put(`/admin/gestores/${id}`, dados);
       // Atualizar departamentos associados
-      await api.post(`/api/admin/gestores/${id}/departamentos`, { departamentoIds: departamentosSelecionados });
+      await api.post(`/admin/gestores/${id}/departamentos`, { departamentoIds: departamentosSelecionados });
       navigate("/admin/gestores");
     } catch (err) {
       console.error("Erro ao atualizar gestor:", err);

@@ -20,7 +20,7 @@ export default function PropostasCompativeis() {
     }
     
     // Carregar propostas compatíveis
-    api.get("/api/estudante/propostas/compativeis")
+    api.get("/estudante/propostas/compativeis")
       .then((res) => {
         setPropostas(res.data);
         console.log('Propostas compatíveis recebidas:', res.data);
@@ -52,7 +52,7 @@ export default function PropostasCompativeis() {
     // Remover carregamento separado de setores - usamos apenas os das propostas
       
     // Carregar favoritos
-    api.get("/api/estudante/favoritos")
+    api.get("/estudante/favoritos")
       .then((res) => {
         setFavoritos(res.data.map((fav) => fav.id));
       })
@@ -65,10 +65,10 @@ export default function PropostasCompativeis() {
     setLoadingFav(id);
     try {
       if (favoritos.includes(id)) {
-        await api.delete(`/api/estudante/favoritos/${id}`);
+        await api.delete(`/estudante/favoritos/${id}`);
         setFavoritos((prev) => prev.filter((fid) => fid !== id));
       } else {
-        await api.post(`/api/estudante/favoritos/${id}`);
+        await api.post(`/estudante/favoritos/${id}`);
         setFavoritos((prev) => [...prev, id]);
       }
     } catch (err) {

@@ -15,10 +15,10 @@ export default function PainelKPIs() {
     const fetchKPIs = async () => {
       try {
         const [utilizadoresRes, empresasRes, propostasRes, departamentosRes] = await Promise.all([
-          api.get("/api/admin/kpi/utilizadores"),
-          api.get("/api/admin/kpi/empresas"),
-          api.get("/api/admin/kpi/propostas"),
-          api.get("/api/admin/kpi/departamentos"),
+          api.get("/admin/kpi/utilizadores"),
+          api.get("/admin/kpi/empresas"),
+          api.get("/admin/kpi/propostas"),
+          api.get("/admin/kpi/departamentos"),
         ]);
 
         setDados({

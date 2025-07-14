@@ -25,7 +25,7 @@ export default function Propostas() {
       setLoading(true);
       setError("");
       // Buscar propostas da empresa específica
-      const res = await api.get("/api/empresa/propostas");
+      const res = await api.get("/empresa/propostas");
       setPropostas(res.data || []);
     } catch (err) {
       console.error("Erro ao buscar propostas:", err);
@@ -97,7 +97,7 @@ export default function Propostas() {
 
   const mudarEstado = async (id, acao) => {
     try {
-      await api.patch(`/api/empresa/propostas/${id}/${acao}`);
+      await api.patch(`/empresa/propostas/${id}/${acao}`);
       buscarPropostas();
     } catch (err) {
       console.error("Erro ao mudar estado:", err);
@@ -107,7 +107,7 @@ export default function Propostas() {
   const apagarProposta = async (id) => {
     if (!window.confirm("Tens a certeza que queres apagar esta proposta permanentemente?")) return;
     try {
-      await api.delete(`/api/empresa/propostas/${id}`);
+      await api.delete(`/empresa/propostas/${id}`);
       buscarPropostas();
     } catch (err) {
       console.error("Erro ao apagar proposta:", err);

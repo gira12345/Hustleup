@@ -16,7 +16,7 @@ export default function Gestores() {
     try {
       setLoading(true);
       setError("");
-      const res = await api.get("/api/admin/gestores");
+      const res = await api.get("/admin/gestores");
       setGestores(res.data.gestores || []);
     } catch (err) {
       console.error("Erro ao buscar gestores:", err);
@@ -30,7 +30,7 @@ export default function Gestores() {
   const removerGestor = async (id) => {
     if (!window.confirm("Tens a certeza que queres remover este gestor?")) return;
     try {
-      await api.delete(`/api/admin/gestores/${id}`);
+      await api.delete(`/admin/gestores/${id}`);
       buscarGestores();
     } catch (err) {
       console.error("Erro ao remover gestor:", err);

@@ -14,7 +14,7 @@ export default function Favoritos() {
 
   const carregarFavoritos = async () => {
     try {
-      const res = await api.get("/api/estudante/favoritos");
+      const res = await api.get("/estudante/favoritos");
       setFavoritos(res.data || []);
     } catch (err) {
       console.error("Erro ao carregar favoritos:", err);
@@ -25,7 +25,7 @@ export default function Favoritos() {
 
   const toggleFavorito = async (propostaId) => {
     try {
-      await api.delete(`/api/estudante/favoritos/${propostaId}`);
+      await api.delete(`/estudante/favoritos/${propostaId}`);
       setFavoritos(favoritos.filter((p) => p.id !== propostaId));
     } catch (err) {
       console.error("Erro ao remover favorito:", err);

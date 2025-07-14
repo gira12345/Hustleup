@@ -18,7 +18,7 @@ export default function CriarEmpresaGestor() {
     try {
       setLoading(true);
       setError("");
-      await api.post("/api/gestor/empresas", {
+      await api.post("/gestor/empresas", {
         nome,
         email,
         password,

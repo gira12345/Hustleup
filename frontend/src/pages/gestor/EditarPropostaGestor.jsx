@@ -26,7 +26,7 @@ export default function EditarPropostaGestor() {
   useEffect(() => {
     const fetchProposta = async () => {
       try {
-        const res = await api.get(`/api/gestor/propostas/${id}`);
+        const res = await api.get(`/gestor/propostas/${id}`);
         setFormData(res.data);
         setLoading(false);
       } catch (err) {
@@ -68,7 +68,7 @@ export default function EditarPropostaGestor() {
     setErro(null);
     setSucesso(null);
     try {
-      await api.put(`/api/gestor/propostas/${id}`, formData);
+      await api.put(`/gestor/propostas/${id}`, formData);
       setSucesso('Proposta atualizada com sucesso!');
       setTimeout(() => navigate('/gestor/propostas'), 1500);
     } catch (err) {

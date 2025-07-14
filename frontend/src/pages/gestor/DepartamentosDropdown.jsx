@@ -9,7 +9,7 @@ export default function DepartamentosDropdown({ value, onChange }) {
     const fetchDepartamentos = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await api.get("/api/gestor/departamentos", {
+        const res = await api.get("/gestor/departamentos", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setDepartamentos(res.data || []);

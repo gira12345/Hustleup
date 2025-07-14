@@ -68,7 +68,7 @@ export default function VerPropostaEmpresa() {
           return;
         }
         
-        const res = await api.get(`/api/propostas/${id}`);
+        const res = await api.get(`/propostas/${id}`);
         setProposta(res.data);
         
       } catch (err) {

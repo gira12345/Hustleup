@@ -17,7 +17,7 @@ export default function PropostasGestor() {
   const buscarPropostas = async () => {
     try {
       setLoading(true);
-      const res = await api.get("/api/gestor/propostas");
+      const res = await api.get("/gestor/propostas");
       setPropostas(res.data || []);
     } catch (err) {
       setError("Erro ao carregar propostas");
@@ -40,7 +40,7 @@ export default function PropostasGestor() {
 
   const mudarEstado = async (id, acao) => {
     try {
-      await api.patch(`/api/gestor/propostas/${id}/${acao}`);
+      await api.patch(`/gestor/propostas/${id}/${acao}`);
       buscarPropostas();
     } catch (err) {
       console.error("Erro ao mudar estado:", err);
@@ -51,7 +51,7 @@ export default function PropostasGestor() {
     if (!window.confirm("Tens a certeza que queres apagar esta proposta?"))
       return;
     try {
-      await api.delete(`/api/gestor/propostas/${id}`);
+      await api.delete(`/gestor/propostas/${id}`);
       buscarPropostas();
     } catch (err) {
       console.error("Erro ao apagar proposta:", err);

@@ -55,7 +55,7 @@ export default function VerPropostaGestor() {
       try {
         setLoading(true);
         setError("");
-        const res = await api.get(`/api/gestor/propostas/${id}`);
+        const res = await api.get(`/gestor/propostas/${id}`);
         setProposta(res.data);
       } catch (err) {
         setError(`Erro ao carregar proposta: ${err.response?.status || 'Sem resposta'}`);
@@ -119,11 +119,11 @@ export default function VerPropostaGestor() {
   const mudarEstado = async (acao) => {
     try {
       console.log(`Mudando estado da proposta ${id} para:`, acao);
-      await api.patch(`/api/gestor/propostas/${id}/${acao}`);
+      await api.patch(`/gestor/propostas/${id}/${acao}`);
       console.log('Estado alterado com sucesso');
       
       // Recarregar a proposta para ver o estado atualizado
-      const res = await api.get(`/api/gestor/propostas/${id}`);
+      const res = await api.get(`/gestor/propostas/${id}`);
       setProposta(res.data);
     } catch (err) {
       console.error(`Erro ao ${acao} proposta:`, err);

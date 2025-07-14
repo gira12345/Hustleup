@@ -19,7 +19,7 @@ export default function CriarEmpresa() {
     try {
       setLoading(true);
       setError("");
-      await api.post("/api/auth/registar-empresa", {
+      await api.post("/auth/registar-empresa", {
         nome,
         email,
         password,

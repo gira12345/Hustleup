@@ -31,7 +31,7 @@ export default function EditarProposta() {
     // Buscar dados da proposta
     async function fetchProposta() {
       try {
-        const response = await api.get(`/api/admin/propostas/${id}`);
+        const response = await api.get(`/admin/propostas/${id}`);
         const data = response.data;
         setFormData({
           nome: data.nome || data.titulo || '',
@@ -77,7 +77,7 @@ export default function EditarProposta() {
     setErro(null);
     setSucesso(null);
     try {
-      await api.put(`/api/admin/propostas/${id}`, formData);
+      await api.put(`/admin/propostas/${id}`, formData);
       setSucesso('Proposta atualizada com sucesso!');
       setTimeout(() => navigate('/admin/propostas'), 1500);
     } catch (err) {

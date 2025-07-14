@@ -16,7 +16,7 @@ export default function EditarUtilizadorGestor() {
       try {
         setLoading(true);
         setError("");
-        const res = await api.get(`/api/gestor/utilizadores/${id}`);
+        const res = await api.get(`/gestor/utilizadores/${id}`);
         setNome(res.data.nome);
         setEmail(res.data.email);
       } catch (err) {
@@ -32,7 +32,7 @@ export default function EditarUtilizadorGestor() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.put(`/api/gestor/utilizadores/${id}`, { nome, email });
+      await api.put(`/gestor/utilizadores/${id}`, { nome, email });
       navigate("/gestor/utilizadores");
     } catch (err) {
       setError(`Erro ao editar utilizador: ${err.response?.data?.message || err.message}`);
@@ -126,7 +126,7 @@ export default function EditarUtilizadorGestor() {
               onClick={async () => {
                 if (window.confirm('Tem a certeza que deseja remover este utilizador?')) {
                   try {
-                    await api.delete(`/api/gestor/utilizadores/${id}`);
+                    await api.delete(`/gestor/utilizadores/${id}`);
                     navigate('/gestor/utilizadores');
                   } catch (err) {
                     alert('Erro ao remover utilizador: ' + (err.response?.data?.message || err.message));

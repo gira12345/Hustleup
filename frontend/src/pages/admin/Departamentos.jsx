@@ -12,7 +12,7 @@ export default function Departamentos() {
 
   const fetchDepartamentos = async () => {
     try {
-      const res = await api.get("/api/admin/departamentos");
+      const res = await api.get("/admin/departamentos");
       setDepartamentos(res.data);
     } catch (err) {
       console.error("Erro ao carregar departamentos:", err);
@@ -22,7 +22,7 @@ export default function Departamentos() {
   const removerDepartamento = async (id) => {
     if (!window.confirm("Tens a certeza que queres remover este departamento?")) return;
     try {
-      await api.delete(`/api/admin/departamentos/${id}`);
+      await api.delete(`/admin/departamentos/${id}`);
       fetchDepartamentos();
     } catch (err) {
       console.error("Erro ao remover departamento:", err);

@@ -14,7 +14,7 @@ export default function CriarDepartamento() {
     try {
       setLoading(true);
       setError("");
-      await api.post("/api/admin/departamentos", { nome });
+      await api.post("/admin/departamentos", { nome });
       navigate("/admin/departamentos");
     } catch (err) {
       setError("Erro ao criar departamento. Tente novamente mais tarde.");

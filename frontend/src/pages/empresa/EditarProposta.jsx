@@ -36,7 +36,7 @@ export default function EditarProposta() {
         }
 
         // Carregar dados da proposta
-        const resProposta = await api.get(`/api/empresa/propostas/${id}`);
+        const resProposta = await api.get(`/empresa/propostas/${id}`);
         const proposta = resProposta.data;
         
         setFormData({
@@ -91,7 +91,7 @@ export default function EditarProposta() {
     setSucesso(null);
     
     try {
-      await api.patch(`/api/empresa/propostas/${id}`, formData);
+      await api.patch(`/empresa/propostas/${id}`, formData);
       setSucesso('Proposta atualizada com sucesso!');
       setTimeout(() => navigate('/empresa/propostas'), 1500);
     } catch (err) {

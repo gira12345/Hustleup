@@ -17,7 +17,7 @@ export default function DashboardGestor() {
 
   const carregarPropostas = async () => {
     try {
-      const res = await api.get("/api/gestor/propostas");
+      const res = await api.get("/gestor/propostas");
       setPropostas(res.data);
     } catch (err) {
       setErro("Erro ao carregar propostas.");
@@ -30,7 +30,7 @@ export default function DashboardGestor() {
     try {
       const token = localStorage.getItem("token");
       const res = await api.patch(
-        `/api/gestor/propostas/${id}/aprovar`,
+        `/gestor/propostas/${id}/aprovar`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -49,7 +49,7 @@ export default function DashboardGestor() {
     try {
       const token = localStorage.getItem("token");
       const res = await api.patch(
-        `/api/gestor/propostas/${id}/desativar`,
+        `/gestor/propostas/${id}/desativar`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -68,7 +68,7 @@ export default function DashboardGestor() {
     try {
       const token = localStorage.getItem("token");
       const res = await api.patch(
-        `/api/gestor/propostas/${id}/ativar`,
+        `/gestor/propostas/${id}/ativar`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -87,7 +87,7 @@ export default function DashboardGestor() {
     try {
       const token = localStorage.getItem("token");
       const res = await api.patch(
-        `/api/gestor/propostas/${id}/arquivar`,
+        `/gestor/propostas/${id}/arquivar`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },

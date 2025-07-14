@@ -47,8 +47,8 @@ export default function Utilizadores() {
   const fetchEstudantes = async () => {
     const startTime = performance.now();
     try {
-      console.log('Fazendo request para /api/admin/utilizadores');
-      const res = await api.get("/api/admin/utilizadores", {
+      console.log('Fazendo request para /admin/utilizadores');
+      const res = await api.get("/admin/utilizadores", {
         timeout: 3000 // 3 segundos específico para esta request
       });
       const endTime = performance.now();
@@ -74,7 +74,7 @@ export default function Utilizadores() {
 
   const fetchRemocoes = async () => {
     try {
-      const res = await api.get("/api/admin/remocoes");
+      const res = await api.get("/admin/remocoes");
       setRemocoes(res.data || []);
       // Não limpar o erro aqui, pois pode ser do fetchEstudantes
     } catch (err) {
@@ -98,7 +98,7 @@ export default function Utilizadores() {
   const removerEstudante = async (id) => {
     if (!window.confirm("Tens a certeza que queres remover este utilizador?")) return;
     try {
-      await api.delete(`/api/admin/utilizadores/${id}`);
+      await api.delete(`/admin/utilizadores/${id}`);
       fetchEstudantes();
     } catch (err) {
       console.error("Erro ao remover utilizador:", err);
@@ -108,7 +108,7 @@ export default function Utilizadores() {
 
   const aprovarRemocao = async (id) => {
     try {
-      await api.patch(`/api/admin/remocoes/${id}/aprovar`);
+      await api.patch(`/admin/remocoes/${id}/aprovar`);
       fetchRemocoes();
       fetchEstudantes();
     } catch (err) {

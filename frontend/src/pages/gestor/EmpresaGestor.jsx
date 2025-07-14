@@ -18,7 +18,7 @@ export default function EmpresasGestor() {
     try {
       setLoading(true);
       setError("");
-      const res = await api.get("/api/gestor/empresas");
+      const res = await api.get("/gestor/empresas");
       setEmpresas(res.data || []);
     } catch (err) {
       if (err.response && err.response.status === 403) {
@@ -34,7 +34,7 @@ export default function EmpresasGestor() {
 
   const aprovarEmpresa = async (id) => {
     try {
-      await api.patch(`/api/gestor/empresas/${id}/aprovar`);
+      await api.patch(`/gestor/empresas/${id}/aprovar`);
       buscarEmpresas();
     } catch (err) {
       setError("Erro ao aprovar empresa.");
@@ -43,7 +43,7 @@ export default function EmpresasGestor() {
 
   const desativarEmpresa = async (id) => {
     try {
-      await api.patch(`/api/gestor/empresas/${id}/desativar`);
+      await api.patch(`/gestor/empresas/${id}/desativar`);
       buscarEmpresas();
     } catch (err) {
       setError("Erro ao desativar empresa.");
@@ -53,7 +53,7 @@ export default function EmpresasGestor() {
   const apagarEmpresa = async (id) => {
     if (!window.confirm("Tens a certeza que queres apagar esta empresa permanentemente?")) return;
     try {
-      await api.delete(`/api/gestor/empresas/${id}`);
+      await api.delete(`/gestor/empresas/${id}`);
       buscarEmpresas();
     } catch (err) {
       setError("Erro ao apagar empresa.");

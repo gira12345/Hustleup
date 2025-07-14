@@ -19,7 +19,7 @@ const DashboardEmpresa = () => {
       console.log('Carregando todas as propostas...');
       
       // Buscar TODAS as propostas (não apenas da empresa logada)
-      const resPropostas = await api.get("/api/propostas");
+      const resPropostas = await api.get("/propostas");
       console.log("Propostas carregadas:", resPropostas.data);
       
       setPropostas(resPropostas.data || []);

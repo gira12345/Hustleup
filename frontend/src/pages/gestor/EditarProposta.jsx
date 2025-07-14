@@ -27,7 +27,7 @@ export default function EditarPropostaGestor() {
       try {
         setLoading(true);
         setError("");
-        const res = await api.get(`/api/gestor/propostas/${id}`);
+        const res = await api.get(`/gestor/propostas/${id}`);
         setNome(res.data.nome || "");
         setDepartamento(res.data.departamento || "");
         setMorada(res.data.morada || "");
@@ -68,7 +68,7 @@ export default function EditarPropostaGestor() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.put(`/api/gestor/propostas/${id}`, {
+      await api.put(`/gestor/propostas/${id}`, {
         nome,
         departamento,
         morada,

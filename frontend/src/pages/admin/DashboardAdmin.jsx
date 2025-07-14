@@ -35,13 +35,13 @@ export default function DashboardAdmin() {
       try {
         // Tentar primeiro com rotas admin
         [resPropostas, resDepartamentos] = await Promise.all([
-          api.get("/api/admin/propostas"),
-          api.get("/api/admin/departamentos")
+          api.get("/admin/propostas"),
+          api.get("/admin/departamentos")
         ]);
       } catch (adminError) {
         // Fallback para rotas públicas
         try {
-          resPropostas = await api.get("/api/propostas");
+          resPropostas = await api.get("/propostas");
           resDepartamentos = { data: departamentosFallback };
         } catch (publicError) {
           throw publicError;
@@ -113,7 +113,7 @@ export default function DashboardAdmin() {
     try {
       setSuccess("");
       setError("");
-      await api.patch(`/api/admin/propostas/${id}/aprovar`);
+      await api.patch(`/admin/propostas/${id}/aprovar`);
       setSuccess("Proposta aprovada com sucesso!");
       setTimeout(() => setSuccess(""), 3000); // Auto-hide após 3 segundos
       carregarDados(); // Recarregar dados
@@ -127,7 +127,7 @@ export default function DashboardAdmin() {
     try {
       setSuccess("");
       setError("");
-      await api.patch(`/api/admin/propostas/${id}/desativar`);
+      await api.patch(`/admin/propostas/${id}/desativar`);
       setSuccess("Proposta desativada com sucesso!");
       setTimeout(() => setSuccess(""), 3000); // Auto-hide após 3 segundos
       carregarDados(); // Recarregar dados
@@ -141,7 +141,7 @@ export default function DashboardAdmin() {
     try {
       setSuccess("");
       setError("");
-      await api.patch(`/api/admin/propostas/${id}/arquivar`);
+      await api.patch(`/admin/propostas/${id}/arquivar`);
       setSuccess("Proposta arquivada com sucesso!");
       setTimeout(() => setSuccess(""), 3000); // Auto-hide após 3 segundos
       carregarDados(); // Recarregar dados
@@ -155,7 +155,7 @@ export default function DashboardAdmin() {
     try {
       setSuccess("");
       setError("");
-      await api.patch(`/api/admin/propostas/${id}/ativar`);
+      await api.patch(`/admin/propostas/${id}/ativar`);
       setSuccess("Proposta ativada com sucesso!");
       setTimeout(() => setSuccess(""), 3000); // Auto-hide após 3 segundos
       carregarDados(); // Recarregar dados

@@ -12,7 +12,7 @@ export default function CriarUtilizador() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/api/admin/estudantes", { nome, email, password });
+      await api.post("/admin/estudantes", { nome, email, password });
       navigate("/admin/utilizadores");
     } catch (err) {
       console.error("Erro ao criar utilizador:", err);

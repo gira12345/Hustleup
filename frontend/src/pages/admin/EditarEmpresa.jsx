@@ -20,7 +20,7 @@ export default function EditarEmpresa() {
   useEffect(() => {
     async function fetchEmpresa() {
       try {
-        const res = await api.get(`/api/admin/empresas/${id}`);
+        const res = await api.get(`/admin/empresas/${id}`);
         const data = res.data;
         setEmpresa({
           nome: data.nome || "",
@@ -48,7 +48,7 @@ export default function EditarEmpresa() {
     setErro("");
     setSucesso("");
     try {
-      await api.put(`/api/admin/empresas/${id}`, empresa);
+      await api.put(`/admin/empresas/${id}`, empresa);
       setSucesso("Empresa atualizada com sucesso!");
       setTimeout(() => navigate("/admin/empresas"), 1500);
     } catch (err) {

@@ -55,7 +55,7 @@ export default function VerProposta() {
       try {
         setLoading(true);
         setError("");
-        const res = await api.get(`/api/admin/propostas/${id}`);
+        const res = await api.get(`/admin/propostas/${id}`);
         console.log('Dados da proposta recebidos:', res.data);
         setProposta(res.data);
       } catch (err) {
@@ -74,11 +74,11 @@ export default function VerProposta() {
   const mudarEstado = async (acao) => {
     try {
       console.log(`Mudando estado da proposta ${id} para:`, acao);
-      await api.patch(`/api/admin/propostas/${id}/${acao}`);
+      await api.patch(`/admin/propostas/${id}/${acao}`);
       console.log('Estado alterado com sucesso');
       
       // Recarregar a proposta para ver o estado atualizado
-      const res = await api.get(`/api/admin/propostas/${id}`);
+      const res = await api.get(`/admin/propostas/${id}`);
       setProposta(res.data);
     } catch (err) {
       console.error(`Erro ao ${acao} proposta:`, err);
@@ -363,7 +363,7 @@ export default function VerProposta() {
                   onClick={async () => {
                     if (!window.confirm("Tens a certeza que queres apagar esta proposta permanentemente?")) return;
                     try {
-                      await api.delete(`/api/admin/propostas/${proposta.id}`);
+                      await api.delete(`/admin/propostas/${proposta.id}`);
                       navigate("/admin/propostas");
                     } catch (err) {
                       alert("Erro ao apagar proposta. Tenta novamente.");

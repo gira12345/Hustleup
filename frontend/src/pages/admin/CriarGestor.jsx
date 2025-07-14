@@ -14,7 +14,7 @@ export default function CriarGestor() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    api.get("/api/admin/departamentos")
+    api.get("/admin/departamentos")
       .then(res => setDepartamentos(res.data))
       .catch(() => setDepartamentos([]));
   }, []);
@@ -24,7 +24,7 @@ export default function CriarGestor() {
     try {
       setLoading(true);
       setError("");
-      await api.post("/api/admin/gestores", { nome, email, password, departamentoId });
+      await api.post("/admin/gestores", { nome, email, password, departamentoId });
       navigate("/admin/gestores");
     } catch (err) {
       console.error("Erro ao criar gestor:", err);

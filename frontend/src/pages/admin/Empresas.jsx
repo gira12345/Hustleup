@@ -17,7 +17,7 @@ export default function Empresas() {
     try {
       setLoading(true);
       setError("");
-      const res = await api.get("/api/admin/empresas");
+      const res = await api.get("/admin/empresas");
       setEmpresas(res.data || []);
     } catch (err) {
       console.error("Erro ao buscar empresas:", err);
@@ -30,7 +30,7 @@ export default function Empresas() {
 
   const aprovarEmpresa = async (id) => {
     try {
-      await api.patch(`/api/admin/empresas/${id}/aprovar`);
+      await api.patch(`/admin/empresas/${id}/aprovar`);
       buscarEmpresas();
     } catch (err) {
       console.error("Erro ao aprovar empresa:", err);
@@ -39,7 +39,7 @@ export default function Empresas() {
 
   const desativarEmpresa = async (id) => {
     try {
-      await api.patch(`/api/admin/empresas/${id}/desativar`);
+      await api.patch(`/admin/empresas/${id}/desativar`);
       buscarEmpresas();
     } catch (err) {
       console.error("Erro ao desativar empresa:", err);
@@ -49,7 +49,7 @@ export default function Empresas() {
   const apagarEmpresa = async (id) => {
     if (!window.confirm("Tens a certeza que queres apagar esta empresa permanentemente?")) return;
     try {
-      await api.delete(`/api/admin/empresas/${id}`);
+      await api.delete(`/admin/empresas/${id}`);
       buscarEmpresas();
     } catch (err) {
       console.error("Erro ao apagar empresa:", err);

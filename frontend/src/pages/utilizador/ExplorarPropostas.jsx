@@ -34,10 +34,10 @@ function PropostasCompatíveis() {
   const toggleFavorito = async (id) => {
     try {
       if (favoritos.includes(id)) {
-        await api.delete(`/api/estudante/favoritos/${id}`);
+        await api.delete(`/estudante/favoritos/${id}`);
         setFavoritos(favoritos.filter((f) => f !== id));
       } else {
-        await api.post(`/api/estudante/favoritos/${id}`);
+        await api.post(`/estudante/favoritos/${id}`);
         setFavoritos([...favoritos, id]);
       }
     } catch (error) {

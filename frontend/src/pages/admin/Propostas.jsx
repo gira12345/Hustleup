@@ -24,7 +24,7 @@ export default function Propostas() {
     try {
       setLoading(true);
       setError("");
-      const res = await api.get("/api/admin/propostas");
+      const res = await api.get("/admin/propostas");
       setPropostas(res.data || []);
     } catch (err) {
       console.error("Erro ao buscar propostas:", err);
@@ -67,7 +67,7 @@ export default function Propostas() {
 
   const mudarEstado = async (id, acao) => {
     try {
-      await api.patch(`/api/admin/propostas/${id}/${acao}`);
+      await api.patch(`/admin/propostas/${id}/${acao}`);
       buscarPropostas();
     } catch (err) {
       console.error("Erro ao mudar estado:", err);
@@ -77,7 +77,7 @@ export default function Propostas() {
   const apagarProposta = async (id) => {
     if (!window.confirm("Tens a certeza que queres apagar esta proposta permanentemente?")) return;
     try {
-      await api.delete(`/api/admin/propostas/${id}`);
+      await api.delete(`/admin/propostas/${id}`);
       buscarPropostas();
     } catch (err) {
       console.error("Erro ao apagar proposta:", err);

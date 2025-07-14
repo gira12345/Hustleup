@@ -39,7 +39,7 @@ export default function UtilizadoresGestor() {
 
   const fetchEstudantes = async () => {
     try {
-      const res = await api.get("/api/gestor/utilizadores");
+      const res = await api.get("/gestor/utilizadores");
       setEstudantes(res.data.utilizadores || []);
       setBackendStatus('online');
     } catch (err) {
@@ -52,7 +52,7 @@ export default function UtilizadoresGestor() {
 
   const fetchRemocoes = async () => {
     try {
-      const res2 = await api.get("/api/gestor/pedidos-remocao");
+      const res2 = await api.get("/gestor/pedidos-remocao");
       setRemocoes(res2.data || []);
     } catch (err) {
       console.error("Erro ao buscar remoções:", err);
@@ -62,7 +62,7 @@ export default function UtilizadoresGestor() {
 
   const aprovarRemocao = async (id) => {
     try {
-      await api.post(`/api/gestor/pedidos-remocao/${id}/aprovar`, { acao: 'aprovar' });
+      await api.post(`/gestor/pedidos-remocao/${id}/aprovar`, { acao: 'aprovar' });
       fetchRemocoes();
       fetchEstudantes();
     } catch (err) {
@@ -74,7 +74,7 @@ export default function UtilizadoresGestor() {
   const removerEstudante = async (id) => {
     if (window.confirm('Tem a certeza que deseja remover este utilizador?')) {
       try {
-        await api.delete(`/api/gestor/utilizadores/${id}`);
+        await api.delete(`/gestor/utilizadores/${id}`);
         fetchEstudantes();
       } catch (err) {
         alert('Erro ao remover utilizador: ' + (err.response?.data?.message || err.message));

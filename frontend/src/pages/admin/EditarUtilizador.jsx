@@ -16,10 +16,10 @@ export default function EditarUtilizador() {
   useEffect(() => {
     const fetchUtilizador = async () => {
       try {
-        console.log('Fazendo request para:', `/api/admin/estudantes/${id}`);
+        console.log('Fazendo request para:', `/admin/estudantes/${id}`);
         setLoading(true);
         setError("");
-        const res = await api.get(`/api/admin/estudantes/${id}`);
+        const res = await api.get(`/admin/estudantes/${id}`);
         console.log('Utilizador carregado:', res.data);
         setNome(res.data.nome);
         setEmail(res.data.email);
@@ -40,7 +40,7 @@ export default function EditarUtilizador() {
     e.preventDefault();
     try {
       console.log('Editando utilizador:', { nome, email });
-      await api.put(`/api/admin/estudantes/${id}`, { nome, email });
+      await api.put(`/admin/estudantes/${id}`, { nome, email });
       console.log('Utilizador editado com sucesso');
       navigate("/admin/utilizadores");
     } catch (err) {
@@ -149,7 +149,7 @@ export default function EditarUtilizador() {
               onClick={async () => {
                 if (window.confirm('Tem a certeza que deseja remover este utilizador?')) {
                   try {
-                    await api.delete(`/api/admin/estudantes/${id}`);
+                    await api.delete(`/admin/estudantes/${id}`);
                     navigate('/admin/utilizadores');
                   } catch (err) {
                     alert('Erro ao remover utilizador: ' + (err.response?.data?.message || err.message));

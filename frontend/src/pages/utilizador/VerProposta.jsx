@@ -57,12 +57,12 @@ export default function VerPropostaUtilizador() {
       try {
         setLoading(true);
         setError("");
-        const res = await api.get(`/api/propostas/${id}`);
+        const res = await api.get(`/propostas/${id}`);
         setProposta(res.data);
         
         // Verificar se está nos favoritos
         try {
-          const favoritosRes = await api.get("/api/estudante/favoritos");
+          const favoritosRes = await api.get("/estudante/favoritos");
           setIsFavorito(favoritosRes.data.some(f => f.id === parseInt(id)));
         } catch (err) {
           console.error("Erro ao verificar favoritos:", err);
@@ -82,10 +82,10 @@ export default function VerPropostaUtilizador() {
   const toggleFavorito = async () => {
     try {
       if (isFavorito) {
-        await api.delete(`/api/estudante/favoritos/${id}`);
+        await api.delete(`/estudante/favoritos/${id}`);
         setIsFavorito(false);
       } else {
-        await api.post(`/api/estudante/favoritos/${id}`);
+        await api.post(`/estudante/favoritos/${id}`);
         setIsFavorito(true);
       }
     } catch (err) {
