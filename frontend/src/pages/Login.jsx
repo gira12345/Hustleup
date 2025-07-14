@@ -22,15 +22,20 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     
-    console.log('Dados do login:', { email, senha });
+    console.log('🔍 Iniciando login...');
+    console.log('📧 Email:', email);
+    console.log('🔑 Senha:', senha ? '***' : 'vazio');
+    console.log('🌐 API URL:', import.meta.env.VITE_API_URL);
+    console.log('🏗️ Base URL do axios:', api.defaults.baseURL);
     
     try {
+      console.log('📤 Enviando request para: /auth/login');
       const resposta = await api.post('/auth/login', {
         email,
         password: senha
       });
 
-      console.log('Resposta do servidor:', resposta.data);
+      console.log('📨 Resposta recebida:', resposta.data);
 
       const { token, user } = resposta.data;
 
@@ -61,7 +66,14 @@ const Login = () => {
       }
       
     } catch (err) {
-      console.error(' Erro no login:', err);
+      console.error('❌ Erro no login:', err);
+      console.error('🔍 Error details:', {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status,
+        url: err.config?.url,
+        baseURL: err.config?.baseURL
+      });
       
       if (err.response?.data?.message) {
         setErro(err.response.data.message);
