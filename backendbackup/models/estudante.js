@@ -84,6 +84,14 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false
     });
     
+    Estudante.belongsToMany(models.Proposta, {
+      through: 'estudante_favoritos',
+      foreignKey: 'estudanteId',
+      otherKey: 'propostaId',
+      as: 'Favoritos',
+      timestamps: false
+    });
+    
     Estudante.hasMany(models.PedidoRemocao, {
       foreignKey: 'estudanteId'
     });

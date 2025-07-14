@@ -66,6 +66,15 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'gestorId',
       as: 'gestor'
     });
+    
+    // Associação para favoritos
+    Proposta.belongsToMany(models.Estudante, {
+      through: 'estudante_favoritos',
+      foreignKey: 'propostaId',
+      otherKey: 'estudanteId',
+      as: 'EstudantesFavoritos',
+      timestamps: false
+    });
   };
 
   return Proposta;

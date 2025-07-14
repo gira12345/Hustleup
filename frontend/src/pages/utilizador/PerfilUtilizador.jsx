@@ -124,6 +124,9 @@ function PerfilUser() {
             </div>
             <div className="flex-1">
               <h1 className="text-2xl font-bold text-blue-600 mb-2">{perfil.nome}</h1>
+              <p className="text-gray-600 text-sm">
+                Complete o seu perfil com informações adicionais para melhorar a sua visibilidade
+              </p>
             </div>
           </div>
 
@@ -132,44 +135,52 @@ function PerfilUser() {
             <div className="space-y-4">
               <div>
                 <span className="font-semibold text-gray-900">Curso:</span>
-                <p className="text-gray-700 mt-1">{perfil.curso}</p>
+                <p className="text-gray-700 mt-1">{perfil.curso || 'Não especificado'}</p>
               </div>
-              <div>
-                <span className="font-semibold text-gray-900">Instituição:</span>
-                <p className="text-gray-700 mt-1">{perfil.instituicao}</p>
-              </div>
-              <div>
-                <span className="font-semibold text-gray-900">Ano de Conclusão:</span>
-                <p className="text-gray-700 mt-1">{perfil.anoConclusao}</p>
-              </div>
+              {perfil.instituicao && (
+                <div>
+                  <span className="font-semibold text-gray-900">Instituição:</span>
+                  <p className="text-gray-700 mt-1">{perfil.instituicao}</p>
+                </div>
+              )}
+              {perfil.anoConclusao && (
+                <div>
+                  <span className="font-semibold text-gray-900">Ano de Conclusão:</span>
+                  <p className="text-gray-700 mt-1">{perfil.anoConclusao}</p>
+                </div>
+              )}
               <div>
                 <span className="font-semibold text-gray-900">Competências:</span>
-                <p className="text-gray-700 mt-1">{perfil.competencias}</p>
+                <p className="text-gray-700 mt-1">{perfil.competencias || 'Não especificado'}</p>
               </div>
             </div>
             <div className="space-y-4">
-              <div>
-                <span className="font-semibold text-gray-900">Idiomas:</span>
-                <p className="text-gray-700 mt-1">{perfil.idiomas}</p>
-              </div>
-              <div>
-                <span className="font-semibold text-gray-900">LinkedIn:</span>
-                <p className="text-blue-600 mt-1">
-                  {perfil.linkedin ? (
+              {perfil.idiomas && (
+                <div>
+                  <span className="font-semibold text-gray-900">Idiomas:</span>
+                  <p className="text-gray-700 mt-1">{perfil.idiomas}</p>
+                </div>
+              )}
+              {perfil.linkedin && (
+                <div>
+                  <span className="font-semibold text-gray-900">LinkedIn:</span>
+                  <p className="text-blue-600 mt-1">
                     <a href={perfil.linkedin} target="_blank" rel="noopener noreferrer" className="hover:underline">
                       {perfil.linkedin}
                     </a>
-                  ) : '-'}
-                </p>
-              </div>
+                  </p>
+                </div>
+              )}
               <div>
                 <span className="font-semibold text-gray-900">Contacto:</span>
-                <p className="text-gray-700 mt-1">{perfil.telefone || perfil.contacto || perfil.User?.email || '-'}</p>
+                <p className="text-gray-700 mt-1">{perfil.contacto || perfil.User?.email || 'Não especificado'}</p>
               </div>
-              <div>
-                <span className="font-semibold text-gray-900">Sobre Mim:</span>
-                <p className="text-gray-700 mt-1">{perfil.sobreMim}</p>
-              </div>
+              {perfil.sobreMim && (
+                <div>
+                  <span className="font-semibold text-gray-900">Sobre Mim:</span>
+                  <p className="text-gray-700 mt-1">{perfil.sobreMim}</p>
+                </div>
+              )}
             </div>
           </div>
 
@@ -236,25 +247,29 @@ function PerfilUser() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Instituição</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Instituição <span className="text-gray-500 text-xs">(opcional)</span>
+                    </label>
                     <textarea
                       rows={2}
                       name="instituicao"
                       value={formData.instituicao}
                       onChange={handleInputChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Instituição"
+                      placeholder="Nome da instituição de ensino"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Ano de Conclusão</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Ano de Conclusão <span className="text-gray-500 text-xs">(opcional)</span>
+                    </label>
                     <input
                       type="text"
                       name="anoConclusao"
                       value={formData.anoConclusao}
                       onChange={handleInputChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Ano de Conclusão"
+                      placeholder="Ex: 2024"
                     />
                   </div>
                 </div>
@@ -271,40 +286,35 @@ function PerfilUser() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Idiomas</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Idiomas <span className="text-gray-500 text-xs">(opcional)</span>
+                    </label>
                     <textarea
                       rows={2}
                       name="idiomas"
                       value={formData.idiomas}
                       onChange={handleInputChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Idiomas"
+                      placeholder="Ex: Português, Inglês, Espanhol"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">LinkedIn</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      LinkedIn <span className="text-gray-500 text-xs">(opcional)</span>
+                    </label>
                     <textarea
                       rows={2}
                       name="linkedin"
                       value={formData.linkedin}
                       onChange={handleInputChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="LinkedIn"
+                      placeholder="URL do perfil LinkedIn"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
-                    <input
-                      type="text"
-                      name="telefone"
-                      value={formData.telefone || ''}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Contacto (telefone)"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Sobre Mim</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Sobre Mim <span className="text-gray-500 text-xs">(opcional)</span>
+                    </label>
                     <textarea
                       rows={3}
                       name="sobreMim"
