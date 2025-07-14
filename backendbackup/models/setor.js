@@ -10,20 +10,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Setor.associate = (models) => {
-    // Estudantes <-> Setores
-    Setor.belongsToMany(models.Estudante, {
-      through: 'estudante_setor',
-      foreignKey: 'setorId',
-      otherKey: 'estudanteId',
-      timestamps: false
-    });
-
-    // Empresas <-> Setores
-    Setor.belongsToMany(models.Empresa, {
-      through: 'empresa_setor',
-      foreignKey: 'setorId',
-      otherKey: 'empresaId'
-    });
+    // Associações já definidas em index.js
   };
 
   return Setor;

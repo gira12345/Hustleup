@@ -63,6 +63,34 @@ db.Departamento.belongsToMany(db.Estudante, {
   otherKey: 'estudanteId'
 });
 
+// Estudante ↔ Setores
+db.Estudante.belongsToMany(db.Setor, {
+  through: 'estudante_setor',
+  foreignKey: 'estudanteId',
+  otherKey: 'setorId',
+  timestamps: false
+});
+db.Setor.belongsToMany(db.Estudante, {
+  through: 'estudante_setor',
+  foreignKey: 'setorId',
+  otherKey: 'estudanteId',
+  timestamps: false
+});
+
+// Empresa ↔ Setores
+db.Empresa.belongsToMany(db.Setor, {
+  through: 'empresa_setor',
+  foreignKey: 'empresaId',
+  otherKey: 'setorId',
+  timestamps: false
+});
+db.Setor.belongsToMany(db.Empresa, {
+  through: 'empresa_setor',
+  foreignKey: 'setorId',
+  otherKey: 'empresaId',
+  timestamps: false
+});
+
 // Gestor (User) ↔ Departamentos
 db.User.belongsToMany(db.Departamento, {
   through: db.GestorDepartamento,

@@ -73,20 +73,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Estudante.associate = (models) => {
-    Estudante.belongsTo(models.User, {
-      foreignKey: 'userId'
-    });
-
-    Estudante.belongsToMany(models.Setor, {
-      through: 'estudante_setor',
-      foreignKey: 'estudanteId',
-      otherKey: 'setorId',
-      timestamps: false
-    });
-    
-    Estudante.hasMany(models.PedidoRemocao, {
-      foreignKey: 'estudanteId'
-    });
+    // Associações já definidas em index.js
   };
 
   return Estudante;

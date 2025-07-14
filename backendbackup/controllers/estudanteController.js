@@ -6,29 +6,24 @@ const { Empresa, Estudante, Proposta, PedidoRemocao, User, Setor, EstudanteFavor
 exports.getPerfil = async (req, res) => {
   try {
     console.log('🔍 [getPerfil] Buscando estudante para userId:', req.user.id);
+    console.log('🔍 [getPerfil] User data from token:', req.user);
     
     // Primeiro, verificar se o user existe
     const user = await User.findByPk(req.user.id);
     if (!user) {
+      console.log('❌ [getPerfil] User não encontrado no banco');
       return res.status(404).json({ message: 'Utilizador não encontrado' });
     }
     
-    // Buscar o estudante
+    console.log('✅ [getPerfil] User encontrado:', user.nome, user.email);
+    
+    // Buscar o estudante sem includes primeiro para debug
     let estudante = await Estudante.findOne({
-      where: { userId: req.user.id },
-      include: [
-        {
-          model: Setor,
-          through: { attributes: [] }
-        },
-        {
-          model: User,
-          attributes: ['id', 'email', 'nome']
-        }
-      ]
+      where: { userId: req.user.id }
     });
 
-    // Se não existe registo na tabela Estudante, criar um
+    console.log('🔍 [getPerfil] Estudante encontrado (sem includes):', estudante ? 'SIM' : 'NÃO');
+
     if (!estudante) {
       console.log('⚠️ [getPerfil] Estudante não encontrado, criando registo...');
       estudante = await Estudante.create({
@@ -46,17 +41,20 @@ exports.getPerfil = async (req, res) => {
         idiomas: '',
         linkedin: '',
         areasInteresse: '',
-        descricao: '',
-        telefone: ''
+        descricao: ''
       });
-      
-      // Buscar novamente com includes
+      console.log('✅ [getPerfil] Estudante criado com sucesso');
+    }
+
+    // Agora buscar com includes
+    try {
       estudante = await Estudante.findOne({
         where: { userId: req.user.id },
         include: [
           {
             model: Setor,
-            through: { attributes: [] }
+            through: { attributes: [] },
+            required: false
           },
           {
             model: User,
@@ -64,13 +62,24 @@ exports.getPerfil = async (req, res) => {
           }
         ]
       });
+      console.log('✅ [getPerfil] Estudante com includes encontrado');
+    } catch (includeError) {
+      console.log('❌ [getPerfil] Erro com includes:', includeError.message);
+      // Fallback sem includes
+      estudante = await Estudante.findOne({
+        where: { userId: req.user.id }
+      });
+      // Adicionar dados do user manualmente
+      if (estudante) {
+        estudante.dataValues.User = user;
+      }
     }
 
-    console.log('✅ [getPerfil] Estudante encontrado:', estudante.nome);
+    console.log('✅ [getPerfil] Retornando estudante:', estudante.nome);
     res.json(estudante);
 
   } catch (err) {
-    console.error('❌ [getPerfil] Erro:', err);
+    console.error('❌ [getPerfil] Erro completo:', err);
     res.status(500).json({ message: 'Erro ao buscar perfil', error: err.message });
   }
 };
