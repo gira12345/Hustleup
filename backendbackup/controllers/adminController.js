@@ -1068,8 +1068,10 @@ exports.criarEmpresa = async (req, res) => {
       nome,
       userId: novoUser.id,
       descricao: descricao || '',
-      contacto: contacto || '',
-      validado: true
+      contacto: contacto || email, // Usar email se contacto não fornecido
+      validado: true, // Empresas criadas pelo admin são sempre validadas
+      localizacao: '',
+      morada: ''
     });
 
     res.status(201).json({
