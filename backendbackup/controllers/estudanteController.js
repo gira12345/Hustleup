@@ -16,7 +16,10 @@ exports.getPerfil = async (req, res) => {
     // Buscar o estudante
     let estudante = await Estudante.findOne({
       where: { userId: req.user.id },
-      include: [Setor]
+      include: [{
+        model: Setor,
+        through: { attributes: [] }
+      }]
     });
 
     // Se não existe registo na tabela Estudante, criar um
@@ -44,7 +47,10 @@ exports.getPerfil = async (req, res) => {
       // Buscar novamente com includes
       estudante = await Estudante.findOne({
         where: { userId: req.user.id },
-        include: [Setor]
+        include: [{
+          model: Setor,
+          through: { attributes: [] }
+        }]
       });
     }
 
@@ -60,7 +66,13 @@ exports.getPerfil = async (req, res) => {
 // Editar perfil do estudante
 exports.editarPerfil = async (req, res) => {
   try {
-    const estudante = await Estudante.findOne({ where: { userId: req.user.id }, include: [Setor] });
+    const estudante = await Estudante.findOne({ 
+      where: { userId: req.user.id }, 
+      include: [{
+        model: Setor,
+        through: { attributes: [] }
+      }]
+    });
     if (!estudante) return res.status(404).json({ message: 'Estudante não encontrado' });
 
     const { nome, curso, competencias, contacto, setores, sobreMim, objetivo, disponibilidade, tipoProjeto,
@@ -116,7 +128,10 @@ exports.editarPerfil = async (req, res) => {
     // Retorna perfil atualizado (com setores)
     const estudanteAtualizado = await Estudante.findOne({
       where: { userId: req.user.id },
-      include: [Setor]
+      include: [{
+        model: Setor,
+        through: { attributes: [] }
+      }]
     });
 
     res.json({ message: 'Perfil atualizado com sucesso', estudante: estudanteAtualizado });
