@@ -1,1 +1,0 @@
-const RemoverConta = () => <div>Remover Conta</div>; export default RemoverConta;

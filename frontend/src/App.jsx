@@ -40,7 +40,6 @@ import EditarUtilizadorGestor from './pages/gestor/EditarUtilizador.jsx';
 import EditarPropostaGestor from './pages/gestor/EditarProposta.jsx';
 import EditarEmpresaGestor from './pages/gestor/EditarEmpresa.jsx';
 import VerPropostaGestor from './pages/gestor/VerPropostaGestor';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import UserLayout from './pages/utilizador/UserLayout';
 import PropostasCompativeis from './pages/utilizador/PropostasCompativeis';
 import Favoritos from './pages/utilizador/Favoritos';
