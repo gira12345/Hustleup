@@ -199,7 +199,7 @@ exports.listarEstudantes = async (req, res) => {
 exports.obterEstudante = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log('🔍 [obterEstudante] Buscando utilizador com ID:', id);
+    console.log('[obterEstudante] Buscando utilizador com ID:', id);
     
     const { User } = require('../models');
     const utilizador = await User.findOne({
@@ -211,14 +211,14 @@ exports.obterEstudante = async (req, res) => {
     });
     
     if (!utilizador) {
-      console.log('❌ [obterEstudante] Utilizador não encontrado');
+      console.log('[obterEstudante] Utilizador não encontrado');
       return res.status(404).json({ message: 'Utilizador não encontrado.' });
     }
     
-    console.log('✅ [obterEstudante] Utilizador encontrado:', utilizador.nome);
+    console.log('[obterEstudante] Utilizador encontrado:', utilizador.nome);
     res.status(200).json(utilizador);
   } catch (err) {
-    console.error('❌ [obterEstudante] Erro:', err);
+    console.error('[obterEstudante] Erro:', err);
     res.status(500).json({ 
       message: 'Erro ao obter utilizador', 
       error: err.message 
@@ -227,7 +227,7 @@ exports.obterEstudante = async (req, res) => {
 };
 exports.criarEstudante = async (req, res) => {
   try {
-    console.log('🔍 Tentando criar utilizador:', req.body);
+    console.log('Tentando criar utilizador:', req.body);
     const { nome, email, password } = req.body;
     
     if (!nome || !email || !password) {
@@ -266,7 +266,7 @@ exports.criarEstudante = async (req, res) => {
       telefone: ''
     });
     
-    console.log('✅ Utilizador e estudante criados:', novoUser.id, novoUser.email);
+    console.log('Utilizador e estudante criados:', novoUser.id, novoUser.email);
     res.status(201).json({ 
       message: 'Utilizador criado com sucesso!', 
       utilizador: {
@@ -277,7 +277,7 @@ exports.criarEstudante = async (req, res) => {
       }
     });
   } catch (err) {
-    console.error('❌ Erro ao criar utilizador:', err);
+    console.error('Erro ao criar utilizador:', err);
     res.status(500).json({ message: 'Erro ao criar utilizador', error: err.message });
   }
 };
@@ -325,20 +325,20 @@ exports.alterarEstadoProposta = async (req, res) => {
     
     await proposta.save();
     
-    console.log(`📝 Proposta ${id} alterada de '${estadoAnterior}' para '${estado}'`);
+    console.log(`Proposta ${id} alterada de '${estadoAnterior}' para '${estado}'`);
     res.json({ 
       message: `Proposta ${estado} com sucesso`, 
       proposta,
       estadoAnterior 
     });
   } catch (err) {
-    console.error('❌ Erro ao alterar estado da proposta:', err);
+    console.error('Erro ao alterar estado da proposta:', err);
     res.status(500).json({ message: 'Erro ao alterar estado da proposta', error: err.message });
   }
 };
 exports.listarPedidosRemocao = async (req, res) => {
   try {
-    console.log('🔍 [listarPedidosRemocao] Iniciando...');
+    console.log('[listarPedidosRemocao] Iniciando...');
     
     const { PedidoRemocao, Estudante } = require('../models');
     if (!PedidoRemocao) {
@@ -347,9 +347,9 @@ exports.listarPedidosRemocao = async (req, res) => {
     if (!Estudante) {
       throw new Error('Modelo Estudante não encontrado');
     }
-    console.log('✅ [listarPedidosRemocao] Modelos carregados');
+    console.log('[listarPedidosRemocao] Modelos carregados');
     
-    console.log('🔍 [listarPedidosRemocao] Fazendo query...');
+    console.log('[listarPedidosRemocao] Fazendo query...');
     const pedidos = await PedidoRemocao.findAll({
       where: { estado: 'pendente' },
       include: [
@@ -361,7 +361,7 @@ exports.listarPedidosRemocao = async (req, res) => {
       ]
     });
     
-    console.log('✅ [listarPedidosRemocao] Query executada, encontrados:', pedidos.length, 'pedidos');
+    console.log('[listarPedidosRemocao] Query executada, encontrados:', pedidos.length, 'pedidos');
     
     // Formatar os dados para o frontend
     const pedidosFormatados = pedidos.map(p => ({
@@ -372,11 +372,11 @@ exports.listarPedidosRemocao = async (req, res) => {
       estado: p.estado
     }));
     
-    console.log('✅ [listarPedidosRemocao] Dados formatados:', pedidosFormatados.length);
+    console.log('[listarPedidosRemocao] Dados formatados:', pedidosFormatados.length);
     res.status(200).json(pedidosFormatados);
   } catch (err) {
-    console.error('❌ [listarPedidosRemocao] Erro:', err);
-    console.error('❌ [listarPedidosRemocao] Stack:', err.stack);
+    console.error('[listarPedidosRemocao] Erro:', err);
+    console.error('[listarPedidosRemocao] Stack:', err.stack);
     res.status(500).json({ 
       message: 'Erro ao listar pedidos de remoção', 
       error: err.message,
@@ -680,7 +680,7 @@ exports.associarDepartamentosGestor = async (req, res) => {
 // Função para associar gestores a todos os departamentos
 exports.associarGestoresATodosDepartamentos = async (req, res) => {
   try {
-    console.log('🔧 [associarGestoresATodosDepartamentos] Iniciando...');
+    console.log('[associarGestoresATodosDepartamentos] Iniciando...');
     
     // Buscar todos os gestores
     const gestores = await User.findAll({
@@ -690,7 +690,7 @@ exports.associarGestoresATodosDepartamentos = async (req, res) => {
     // Buscar todos os departamentos
     const departamentos = await db.Departamento.findAll();
     
-    console.log('🔍 Encontrados', gestores.length, 'gestores e', departamentos.length, 'departamentos');
+    console.log('Encontrados', gestores.length, 'gestores e', departamentos.length, 'departamentos');
     
     const { GestorDepartamento } = require('../models');
     let associacoesCriadas = 0;
@@ -723,7 +723,7 @@ exports.associarGestoresATodosDepartamentos = async (req, res) => {
     });
     
   } catch (err) {
-    console.error('❌ Erro na associação:', err);
+    console.error('Erro na associação:', err);
     res.status(500).json({ 
       message: 'Erro ao associar gestores', 
       error: err.message 
@@ -740,10 +740,10 @@ exports.listarPropostas = async (req, res) => {
       ],
       order: [['createdAt', 'DESC']]
     });
-    console.log(`📊 Admin endpoint: retornando ${propostas.length} propostas`);
+    console.log(`Admin endpoint: retornando ${propostas.length} propostas`);
     res.json(propostas);
   } catch (err) {
-    console.error('❌ Erro ao listar propostas:', err);
+    console.error('Erro ao listar propostas:', err);
     res.status(500).json({ message: 'Erro ao listar propostas', error: err.message });
   }
 };
@@ -752,12 +752,12 @@ exports.listarPropostas = async (req, res) => {
 exports.obterProposta = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log('🔍 [obterProposta] Buscando proposta com ID:', id);
+    console.log('[obterProposta] Buscando proposta com ID:', id);
     
     const proposta = await Proposta.findByPk(id);
     
     if (!proposta) {
-      console.log('❌ [obterProposta] Proposta não encontrada com ID:', id);
+      console.log('[obterProposta] Proposta não encontrada com ID:', id);
       return res.status(404).json({ message: 'Proposta não encontrada' });
     }
     
@@ -769,7 +769,7 @@ exports.obterProposta = async (req, res) => {
           attributes: ['id', 'nome', 'setor', 'localizacao', 'descricao']
         });
       } catch (empresaErr) {
-        console.warn('⚠️ [obterProposta] Erro ao carregar empresa:', empresaErr.message);
+        console.warn('[obterProposta] Erro ao carregar empresa:', empresaErr.message);
       }
     }
     
@@ -779,10 +779,10 @@ exports.obterProposta = async (req, res) => {
       empresa: empresa ? empresa.toJSON() : null
     };
     
-    console.log('✅ [obterProposta] Proposta encontrada:', proposta.nome);
+    console.log('[obterProposta] Proposta encontrada:', proposta.nome);
     res.json(propostaComEmpresa);
   } catch (err) {
-    console.error('❌ [obterProposta] Erro:', err);
+    console.error('[obterProposta] Erro:', err);
     res.status(500).json({ message: 'Erro ao obter proposta', error: err.message });
   }
 };
@@ -847,10 +847,10 @@ exports.aprovarProposta = async (req, res) => {
     proposta.data_limite_ativacao = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
     await proposta.save();
     
-    console.log(`✅ Proposta ${id} aprovada (${proposta.estado})`);
+    console.log(`Proposta ${id} aprovada (${proposta.estado})`);
     res.json({ message: 'Proposta aprovada com sucesso', proposta });
   } catch (err) {
-    console.error('❌ Erro ao aprovar proposta:', err);
+    console.error('Erro ao aprovar proposta:', err);
     res.status(500).json({ message: 'Erro ao aprovar proposta', error: err.message });
   }
 };
@@ -866,10 +866,10 @@ exports.desativarProposta = async (req, res) => {
     proposta.estado = 'inativo';
     await proposta.save();
     
-    console.log(`❌ Proposta ${id} desativada (${proposta.estado})`);
+    console.log(`Proposta ${id} desativada (${proposta.estado})`);
     res.json({ message: 'Proposta desativada com sucesso', proposta });
   } catch (err) {
-    console.error('❌ Erro ao desativar proposta:', err);
+    console.error('Erro ao desativar proposta:', err);
     res.status(500).json({ message: 'Erro ao desativar proposta', error: err.message });
   }
 };
@@ -888,7 +888,7 @@ exports.arquivarProposta = async (req, res) => {
     console.log(`📁 Proposta ${id} arquivada (${proposta.estado})`);
     res.json({ message: 'Proposta arquivada com sucesso', proposta });
   } catch (err) {
-    console.error('❌ Erro ao arquivar proposta:', err);
+    console.error('Erro ao arquivar proposta:', err);
     res.status(500).json({ message: 'Erro ao arquivar proposta', error: err.message });
   }
 };
@@ -908,7 +908,7 @@ exports.ativarProposta = async (req, res) => {
     console.log(`🔄 Proposta ${id} reativada (${proposta.estado})`);
     res.json({ message: 'Proposta ativada com sucesso', proposta });
   } catch (err) {
-    console.error('❌ Erro ao ativar proposta:', err);
+    console.error('Erro ao ativar proposta:', err);
     res.status(500).json({ message: 'Erro ao ativar proposta', error: err.message });
   }
 };
@@ -933,7 +933,7 @@ exports.getKPIUtilizadores = async (req, res) => {
       gestores
     });
   } catch (error) {
-    console.error('❌ Erro ao buscar KPI de utilizadores:', error);
+    console.error('Erro ao buscar KPI de utilizadores:', error);
     res.status(500).json({ message: 'Erro ao buscar dados de utilizadores', error: error.message });
   }
 };
@@ -953,7 +953,7 @@ exports.getKPIEmpresas = async (req, res) => {
       pendentes
     });
   } catch (error) {
-    console.error('❌ Erro ao buscar KPI de empresas:', error);
+    console.error('Erro ao buscar KPI de empresas:', error);
     res.status(500).json({ message: 'Erro ao buscar dados de empresas', error: error.message });
   }
 };
@@ -977,7 +977,7 @@ exports.getKPIPropostas = async (req, res) => {
       desativadas
     });
   } catch (error) {
-    console.error('❌ Erro ao buscar KPI de propostas:', error);
+    console.error('Erro ao buscar KPI de propostas:', error);
     res.status(500).json({ message: 'Erro ao buscar dados de propostas', error: error.message });
   }
 };
@@ -1000,7 +1000,7 @@ exports.getKPIDepartamentos = async (req, res) => {
       departamentos
     });
   } catch (error) {
-    console.error('❌ Erro ao buscar KPI de departamentos:', error);
+    console.error('Erro ao buscar KPI de departamentos:', error);
     res.status(500).json({ message: 'Erro ao buscar dados de departamentos', error: error.message });
   }
 };
@@ -1053,7 +1053,7 @@ exports.criarEmpresa = async (req, res) => {
     });
 
   } catch (err) {
-    console.error('❌ Erro ao criar empresa:', err);
+    console.error('Erro ao criar empresa:', err);
     res.status(500).json({ message: 'Erro ao criar empresa', error: err.message });
   }
 };
@@ -1079,14 +1079,14 @@ exports.obterEmpresa = async (req, res) => {
 // Função para corrigir empresas criadas sem User
 exports.corrigirEmpresasSemUser = async (req, res) => {
   try {
-    console.log('🔧 [corrigirEmpresasSemUser] Iniciando correção...');
+    console.log('[corrigirEmpresasSemUser] Iniciando correção...');
     
     // Buscar empresas sem userId
     const empresasSemUser = await Empresa.findAll({
       where: { userId: null }
     });
     
-    console.log('🔍 Encontradas', empresasSemUser.length, 'empresas sem User');
+    console.log('Encontradas', empresasSemUser.length, 'empresas sem User');
     
     let corrigidas = 0;
     for (const empresa of empresasSemUser) {
@@ -1110,7 +1110,7 @@ exports.corrigirEmpresasSemUser = async (req, res) => {
         await empresa.save();
         
         corrigidas++;
-        console.log('✅ Corrigida empresa:', empresa.nome);
+        console.log('Corrigida empresa:', empresa.nome);
       }
     }
     
@@ -1121,7 +1121,7 @@ exports.corrigirEmpresasSemUser = async (req, res) => {
     });
     
   } catch (err) {
-    console.error('❌ Erro na correção:', err);
+    console.error('Erro na correção:', err);
     res.status(500).json({ 
       message: 'Erro ao corrigir empresas', 
       error: err.message 
@@ -1132,14 +1132,14 @@ exports.corrigirEmpresasSemUser = async (req, res) => {
 // Função para corrigir estudantes sem registo na tabela Estudante
 exports.corrigirEstudantesSemRegisto = async (req, res) => {
   try {
-    console.log('🔧 [corrigirEstudantesSemRegisto] Iniciando correção...');
+    console.log('[corrigirEstudantesSemRegisto] Iniciando correção...');
     
     // Buscar Users estudantes
     const usersEstudantes = await User.findAll({
       where: { role: 'estudante' }
     });
     
-    console.log('🔍 Encontrados', usersEstudantes.length, 'users estudantes');
+    console.log('Encontrados', usersEstudantes.length, 'users estudantes');
     
     let corrigidos = 0;
     for (const user of usersEstudantes) {
@@ -1170,7 +1170,7 @@ exports.corrigirEstudantesSemRegisto = async (req, res) => {
         });
         
         corrigidos++;
-        console.log('✅ Corrigido estudante:', user.nome);
+        console.log('Corrigido estudante:', user.nome);
       }
     }
     
@@ -1181,7 +1181,7 @@ exports.corrigirEstudantesSemRegisto = async (req, res) => {
     });
     
   } catch (err) {
-    console.error('❌ Erro na correção:', err);
+    console.error('Erro na correção:', err);
     res.status(500).json({ 
       message: 'Erro ao corrigir estudantes', 
       error: err.message 
@@ -1192,14 +1192,14 @@ exports.corrigirEstudantesSemRegisto = async (req, res) => {
 // Função para limpar todas as empresas e utilizadores empresa
 exports.limparTodasEmpresas = async (req, res) => {
   try {
-    console.log('🗑️ [limparTodasEmpresas] Iniciando limpeza...');
+    console.log('[limparTodasEmpresas] Iniciando limpeza...');
     
     // 1. Buscar todos os utilizadores empresa
     const usersEmpresa = await User.findAll({
       where: { role: 'empresa' }
     });
     
-    console.log('🔍 Encontrados', usersEmpresa.length, 'utilizadores empresa');
+    console.log('Encontrados', usersEmpresa.length, 'utilizadores empresa');
     
     // 2. Apagar registos na tabela Empresa
     await Empresa.destroy({
@@ -1212,7 +1212,7 @@ exports.limparTodasEmpresas = async (req, res) => {
       where: { role: 'empresa' }
     });
     
-    console.log('✅ [limparTodasEmpresas] Limpeza concluída');
+    console.log('[limparTodasEmpresas] Limpeza concluída');
     
     res.json({
       message: `Limpeza concluída. ${usersEmpresa.length} empresas removidas.`,
@@ -1221,7 +1221,7 @@ exports.limparTodasEmpresas = async (req, res) => {
     });
     
   } catch (err) {
-    console.error('❌ Erro na limpeza:', err);
+    console.error('Erro na limpeza:', err);
     res.status(500).json({ 
       message: 'Erro ao limpar empresas', 
       error: err.message 
@@ -1232,14 +1232,14 @@ exports.limparTodasEmpresas = async (req, res) => {
 // Função para limpar todos os estudantes e utilizadores estudante
 exports.limparTodosEstudantes = async (req, res) => {
   try {
-    console.log('🗑️ [limparTodosEstudantes] Iniciando limpeza...');
+    console.log('[limparTodosEstudantes] Iniciando limpeza...');
     
     // 1. Buscar todos os utilizadores estudante
     const usersEstudante = await User.findAll({
       where: { role: 'estudante' }
     });
     
-    console.log('🔍 Encontrados', usersEstudante.length, 'utilizadores estudante');
+    console.log('Encontrados', usersEstudante.length, 'utilizadores estudante');
     
     // 2. Apagar registos na tabela Estudante
     await db.Estudante.destroy({
@@ -1252,7 +1252,7 @@ exports.limparTodosEstudantes = async (req, res) => {
       where: { role: 'estudante' }
     });
     
-    console.log('✅ [limparTodosEstudantes] Limpeza concluída');
+    console.log('[limparTodosEstudantes] Limpeza concluída');
     
     res.json({
       message: `Limpeza concluída. ${usersEstudante.length} estudantes removidos.`,
@@ -1261,7 +1261,7 @@ exports.limparTodosEstudantes = async (req, res) => {
     });
     
   } catch (err) {
-    console.error('❌ Erro na limpeza:', err);
+    console.error('Erro na limpeza:', err);
     res.status(500).json({ 
       message: 'Erro ao limpar estudantes', 
       error: err.message 

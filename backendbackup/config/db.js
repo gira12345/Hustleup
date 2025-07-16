@@ -27,9 +27,9 @@ if (process.env.DATABASE_URL) {
         idle: 10000
       }
     });
-    console.log('✅ Sequelize configurado com DATABASE_URL');
+    console.log('Sequelize configurado com DATABASE_URL');
   } catch (error) {
-    console.error('❌ Erro ao configurar Sequelize:', error.message);
+    console.error('Erro ao configurar Sequelize:', error.message);
   }
 } else {
   // Desenvolvimento - usar variáveis separadas

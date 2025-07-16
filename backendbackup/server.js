@@ -16,7 +16,7 @@ const server = app.listen(PORT, '0.0.0.0', () => {
   
   sequelize.authenticate()
     .then(() => {
-      console.log('✅ Conexão com base de dados estabelecida');
+      console.log('Conexão com base de dados estabelecida');
       
       if (process.env.NODE_ENV === 'production') {
         return sequelize.sync({ force: false, alter: true });
@@ -25,23 +25,23 @@ const server = app.listen(PORT, '0.0.0.0', () => {
       }
     })
     .then(() => {
-      console.log('✅ Modelos sincronizados com a base de dados');
+      console.log('Modelos sincronizados com a base de dados');
     })
     .catch((err) => {
-      console.error('❌ Erro na conexão com base de dados:', err.message);
-      console.error('❌ Erro completo:', err);
-      console.error('❌ DATABASE_URL existe:', !!process.env.DATABASE_URL);
-      console.error('❌ NODE_ENV:', process.env.NODE_ENV);
+      console.error('Erro na conexão com base de dados:', err.message);
+      console.error('Erro completo:', err);
+      console.error('DATABASE_URL existe:', !!process.env.DATABASE_URL);
+      console.error('NODE_ENV:', process.env.NODE_ENV);
     });
 });
 
 process.on('uncaughtException', (error) => {
-  console.error('❌ Erro não capturado:', error.message);
+  console.error('Erro não capturado:', error.message);
   process.exit(1);
 });
 
 process.on('unhandledRejection', (error) => {
-  console.error('❌ Promise rejeitada:', error.message);
+  console.error('Promise rejeitada:', error.message);
   server.close(() => {
     process.exit(1);
   });
