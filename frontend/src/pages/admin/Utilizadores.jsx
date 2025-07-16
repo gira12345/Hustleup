@@ -21,11 +21,9 @@ export default function Utilizadores() {
       setLoadingStep('Conectando ao servidor...');
       
       try {
-        // Tentar carregar utilizadores primeiro (mais crítico)
         setLoadingStep('Carregando utilizadores...');
         await fetchEstudantes();
         
-        // Se os utilizadores carregaram, tentar carregar remoções
         setLoadingStep('Carregando pedidos de remoção...');
         await fetchRemocoes();
         
@@ -47,17 +45,12 @@ export default function Utilizadores() {
   const fetchEstudantes = async () => {
     const startTime = performance.now();
     try {
-      console.log('Fazendo request para /admin/utilizadores');
       const res = await api.get("/admin/utilizadores", {
-        timeout: 3000 // 3 segundos específico para esta request
+        timeout: 3000
       });
-      const endTime = performance.now();
-      console.log(`Utilizadores carregados em ${Math.round(endTime - startTime)}ms`);
-      console.log('Resposta recebida:', res.data);
       
-      // O backend retorna { utilizadores: [...] }
       setEstudantes(res.data.utilizadores || []);
-      setError(null); // Limpar erro se os utilizadores carregaram
+      setError(null);
       setBackendStatus('online');
     } catch (err) {
       const endTime = performance.now();

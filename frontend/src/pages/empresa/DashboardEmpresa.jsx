@@ -16,22 +16,16 @@ const DashboardEmpresa = () => {
   const carregarPropostas = async () => {
     try {
       setLoading(true);
-      console.log('Carregando todas as propostas...');
       
-      // Buscar TODAS as propostas (não apenas da empresa logada)
       const resPropostas = await api.get("/propostas");
-      console.log("Propostas carregadas:", resPropostas.data);
       
       setPropostas(resPropostas.data || []);
       
-      // Extrair departamentos únicos das propostas
       const departamentosUnicos = [...new Set(
         (resPropostas.data || [])
           .map(p => p.departamento)
           .filter(Boolean)
       )];
-      
-      console.log("Departamentos encontrados:", departamentosUnicos);
       
       const departamentosFormatados = departamentosUnicos.map(nome => ({ id: nome, nome }));
       setDepartamentos(departamentosFormatados);

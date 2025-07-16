@@ -30,7 +30,6 @@ export default function Propostas() {
     } catch (err) {
       console.error("Erro ao buscar propostas:", err);
       setError(`Erro ao carregar propostas: ${err.response?.status || 'Sem resposta'}`);
-      // Dados mockados para teste
       setPropostas([
         {
           id: 1,

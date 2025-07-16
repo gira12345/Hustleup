@@ -1,11 +1,10 @@
 const { Proposta, Empresa, Setor } = require('../models');
 const { Op } = require('sequelize');
 
-// Ver todas as propostas (ativas)
 exports.getTodasPropostas = async (req, res) => {
   try {
     const propostas = await Proposta.findAll({
-      where: { estado: ['ativa', 'ativo'] }, // Usando array simples
+      where: { estado: ['ativa', 'ativo'] },
       include: Empresa
     });
     res.json(propostas);
@@ -14,7 +13,6 @@ exports.getTodasPropostas = async (req, res) => {
   }
 };
 
-// Ver proposta por ID
 exports.getPropostaPorId = async (req, res) => {
   try {
     const proposta = await Proposta.findByPk(req.params.id, {
@@ -27,7 +25,6 @@ exports.getPropostaPorId = async (req, res) => {
   }
 };
 
-// (Extra) Filtrar por estado
 exports.getPropostasPorEstado = async (req, res) => {
   const { estado } = req.params;
   try {
@@ -41,12 +38,11 @@ exports.getPropostasPorEstado = async (req, res) => {
   }
 };
 
-// (Extra) Filtrar por setor
 exports.getPropostasPorSetor = async (req, res) => {
   const { setorId } = req.params;
   try {
     const propostas = await Proposta.findAll({
-      where: { estado: { [Op.in]: ['ativa', 'ativo'] } }, // Corrigido para aceitar ambos os estados
+      where: { estado: { [Op.in]: ['ativa', 'ativo'] } },
       include: {
         model: Empresa,
         include: {
@@ -69,22 +65,19 @@ async function desativarPropostasExpiradas() {
     { estado: 'inativa' },
     {
       where: {
-        estado: { [Op.in]: ['ativa', 'ativo'] }, // Corrigido para aceitar ambos os estados
+        estado: { [Op.in]: ['ativa', 'ativo'] },
         data_limite_ativacao: { [Op.lt]: now }
       }
     }
   );
 }
 
-// Listar propostas públicas (todas as ativas e não expiradas)
 exports.listarPropostasPublicas = async (req, res) => {
   try {
-    // Comentado temporariamente para debug
-    // await desativarPropostasExpiradas();
+    await desativarPropostasExpiradas();
     const where = {
-      estado: ['ativa', 'ativo'] // Usando array simples
-      // Comentado temporariamente para debug
-      // data_limite_ativacao: { [Op.gte]: new Date() }
+      estado: ['ativa', 'ativo'],
+      data_limite_ativacao: { [Op.gte]: new Date() }
     };
     if (req.query.departamento) {
       where.departamento = req.query.departamento;
@@ -155,7 +148,6 @@ exports.dashboard = async (req, res) => {
   }
 };
 
-// Stubs para todas as funções esperadas nas rotas proposta
 exports.verPropostaPorId = async (req, res) => {
   console.log('verPropostaPorId FOI CHAMADA');
   try {
@@ -239,26 +231,15 @@ exports.propostasMatchEstudante = async (req, res) => {
     // Busca propostas compatíveis - versão simplificada primeiro
     const propostas = await Proposta.findAll({
       where: {
-        // Removendo temporariamente o filtro de áreas para debug
-        // areas: {
-        //   [Op.overlap]: competencias
-        // },
-        estado: ['ativa', 'ativo'] // Usando array simples em vez de Op.in
+        areas: {
+          [Op.overlap]: competencias
+        },
+        estado: ['ativa', 'ativo']
       },
       include: Empresa
     });
     
-    console.log('Propostas encontradas:', propostas.length);
-    
-    // Filtrar manualmente por áreas (temporário para debug)
-    const propostasCompativeis = propostas.filter(proposta => {
-      if (!proposta.areas || !Array.isArray(proposta.areas)) return false;
-      return proposta.areas.some(area => competencias.includes(area));
-    });
-    
-    console.log('Propostas compatíveis após filtro:', propostasCompativeis.length);
-    
-    res.json(propostasCompativeis);
+    res.json(propostas);
   } catch (err) {
     console.error('Erro detalhado ao buscar propostas compatíveis:', err);
     res.status(500).json({ message: 'Erro ao buscar propostas compatíveis', error: err.message });
@@ -290,24 +271,6 @@ exports.criarProposta = async (req, res) => {
     res.status(201).json({ message: 'Proposta criada com sucesso!', proposta });
   } catch (err) {
     res.status(500).json({ message: 'Erro ao criar proposta', error: err.message });
-  }
-};
-
-// Função temporária para debug - listar todas as propostas ativas sem filtro de data
-exports.listarTodasPropostasAtivas = async (req, res) => {
-  try {
-    const propostas = await Proposta.findAll({
-      where: { estado: ['ativa', 'ativo'] }, // Usando array simples
-      include: Empresa
-    });
-    console.log('Propostas ativas encontradas:', propostas.length);
-    propostas.forEach(p => {
-      console.log(`ID: ${p.id}, Nome: ${p.nome}, Estado: ${p.estado}, Data limite: ${p.data_limite_ativacao}`);
-    });
-    res.status(200).json(propostas);
-  } catch (err) {
-    console.error('Erro ao listar propostas ativas:', err);
-    res.status(500).json({ message: 'Erro ao listar propostas ativas', error: err.message });
   }
 };
 

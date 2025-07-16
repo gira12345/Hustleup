@@ -1179,13 +1179,13 @@ exports.debugPedidosRemocao = async (req, res) => {
   }
 };
 
-// Listar pedidos de remoção - versão simplificada para debug
+// Listar pedidos de remoção
 exports.listarPedidosRemocaoSimples = async (req, res) => {
   try {
-    console.log('VERSÃO SIMPLES - Listando pedidos de remoção');
+    console.log('Listando pedidos de remoção');
     console.log('User:', req.user);
     
-    // Buscar TODOS os pedidos pendentes (sem filtro por departamento)
+    // Buscar TODOS os pedidos pendentes
     const pedidos = await PedidoRemocao.findAll({
       where: { estado: 'pendente' },
       include: [{

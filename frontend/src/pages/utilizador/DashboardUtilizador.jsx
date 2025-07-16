@@ -22,14 +22,12 @@ export default function DashboardUtilizador() {
       const resPropostas = await api.get("/propostas");
       setPropostas(resPropostas.data || []);
       
-      // Extrair departamentos únicos das próprias propostas (isso garante que os nomes são exatos)
       const departamentosUnicos = [...new Set(
         (resPropostas.data || [])
           .map(p => p.departamento)
-          .filter(Boolean) // Remove valores null/undefined
+          .filter(Boolean)
       )];
       
-      // Convertê-los para o formato esperado pelo dropdown
       const departamentosFormatados = departamentosUnicos.map(nome => ({ id: nome, nome }));
       
       setDepartamentos(departamentosFormatados);

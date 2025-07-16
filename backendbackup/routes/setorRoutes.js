@@ -3,7 +3,6 @@ const router = express.Router();
 const db = require('../models');
 const Setor = db.Setor;
 
-// GET /api/setores - retorna todos os setores/departamentos
 router.get('/', async (req, res) => {
   try {
     const setores = await Setor.findAll();

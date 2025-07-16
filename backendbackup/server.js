@@ -1,6 +1,5 @@
 require('dotenv').config();
 
-// Garantir que JWT_SECRET está disponível
 if (!process.env.JWT_SECRET) {
   process.env.JWT_SECRET = 'your_super_secret_jwt_key_here_change_in_production';
 }
@@ -10,18 +9,15 @@ const { sequelize } = require('./models');
 
 const PORT = process.env.PORT || 3001;
 
-// Iniciar servidor
 const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`Backend HustleUp operacional na porta ${PORT}`);
   console.log(`Ambiente: ${process.env.NODE_ENV || 'development'}`);
   console.log(`API disponível em: /api/test`);
   
-  // Testar conexão com BD
   sequelize.authenticate()
     .then(() => {
       console.log('✅ Conexão com base de dados estabelecida');
       
-      // Sincronizar modelos com BD - IMPORTANTE para criar tabelas no Render
       if (process.env.NODE_ENV === 'production') {
         return sequelize.sync({ force: false, alter: true });
       } else {
@@ -39,7 +35,6 @@ const server = app.listen(PORT, '0.0.0.0', () => {
     });
 });
 
-// Capturar erros
 process.on('uncaughtException', (error) => {
   console.error('❌ Erro não capturado:', error.message);
   process.exit(1);

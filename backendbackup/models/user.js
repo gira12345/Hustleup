@@ -35,7 +35,6 @@ module.exports = (sequelize, DataTypes) => {
     // timestamps ativados por omissão
   });
 
-  // Método para comparar password
   User.prototype.validarPassword = async function (senha) {
     return await bcrypt.compare(senha, this.password);
   };

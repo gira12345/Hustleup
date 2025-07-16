@@ -1,17 +1,8 @@
-/* ========================================
-   HUSTLEUP - CSS GLOBAL CONSOLIDADO
-   ======================================== */
 
-/* Tailwind CSS base imports */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ========================================
-   RESET CSS E CONFIGURAÇÃO BASE
-   ======================================== */
-
-/* Reset and base styles */
 * {
   box-sizing: border-box;
 }
@@ -42,7 +33,6 @@ body {
   text-align: left;
 }
 
-/* Base link styles */
 a {
   font-weight: 500;
   color: #3b82f6;
@@ -52,11 +42,6 @@ a:hover {
   color: #1d4ed8;
 }
 
-/* ========================================
-   ESTILOS DE LOGIN
-   ======================================== */
-
-/* Login container */
 .login-container {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
@@ -107,11 +92,6 @@ a:hover {
   color: #721c24;
 }
 
-/* ========================================
-   CLASSES TAILWIND PERSONALIZADAS
-   ======================================== */
-
-/* Garantir que as classes do Tailwind funcionem */
 .bg-\[#0f1e36\] {
   background-color: #0f1e36 !important;
 }
@@ -136,11 +116,6 @@ a:hover {
   color: #9ca3af !important;
 }
 
-/* ========================================
-   UTILITÁRIOS DE LAYOUT
-   ======================================== */
-
-/* Estilos específicos para garantir que o layout funcione */
 .flex { display: flex; }
 .h-screen { height: 100vh; }
 .bg-gray-100 { background-color: #f3f4f6; }
@@ -212,11 +187,6 @@ a:hover {
 .hover\:bg-green-700:hover { background-color: #15803d; }
 .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
 
-/* ========================================
-   ESTILOS ESPECÍFICOS PARA ADMIN
-   ======================================== */
-
-/* Classes específicas para o admin layout */
 .bg-admin-dark {
   background-color: #0f1e36;
 }
@@ -229,7 +199,6 @@ a:hover {
   background-color: #1c2d50;
 }
 
-/* Estilos para a Sidebar */
 .hover-bg-secondary:hover {
   background-color: rgba(108, 117, 125, 0.3) !important;
   transition: all 0.3s ease;
@@ -243,11 +212,6 @@ a:hover {
   transform: translateX(2px);
 }
 
-/* ========================================
-   ESTILOS DE COMPONENTES
-   ======================================== */
-
-/* Animações suaves para cards */
 .card {
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
@@ -257,7 +221,6 @@ a:hover {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Efeitos de botões */
 .btn {
   transition: all 0.2s ease-in-out;
 }
@@ -266,7 +229,6 @@ a:hover {
   transform: translateY(-1px);
 }
 
-/* Cores de gradiente customizadas */
 .bg-gradient-primary {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
@@ -283,14 +245,12 @@ a:hover {
   background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
 }
 
-/* Efeitos para tabelas */
 .table tbody tr:hover {
   background-color: rgba(0, 123, 255, 0.05);
   transform: scale(1.001);
   transition: all 0.2s ease;
 }
 
-/* Loading spinner personalizado */
 .loading-container {
   min-height: 400px;
   display: flex;
@@ -299,13 +259,11 @@ a:hover {
   background: linear-gradient(45deg, #f8f9fa, #e9ecef);
 }
 
-/* Badges customizados */
 .badge {
   font-size: 0.75em;
   font-weight: 600;
 }
 
-/* Efeitos de foco para acessibilidade */
 .btn:focus,
 .form-control:focus,
 .form-select:focus {
@@ -313,14 +271,12 @@ a:hover {
   border-color: #86b7fe;
 }
 
-/* Estilo para estatísticas */
 .stats-card {
   background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.8));
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255,255,255,0.2);
 }
 
-/* Cores de status personalizadas */
 .status-pending {
   background-color: #fff3cd;
   color: #856404;
@@ -339,11 +295,6 @@ a:hover {
   border: 1px solid #f1aeb5;
 }
 
-/* ========================================
-   UTILITÁRIOS DE ESPAÇAMENTO
-   ======================================== */
-
-/* Estilos para tabelas */
 .space-y-10 > * + * {
   margin-top: 2.5rem;
 }
@@ -352,11 +303,6 @@ a:hover {
   margin-left: 0.75rem;
 }
 
-/* ========================================
-   ANIMAÇÕES
-   ======================================== */
-
-/* Animação de entrada */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -381,18 +327,12 @@ a:hover {
   }
 }
 
-/* ========================================
-   RESPONSIVIDADE
-   ======================================== */
-
-/* Modais responsivos */
 @media (max-width: 768px) {
   .modal-dialog {
     margin: 1rem 0.5rem;
   }
 }
 
-/* Sidebar responsiva */
 @media (max-width: 992px) {
   .admin-sidebar {
     width: 100% !important;

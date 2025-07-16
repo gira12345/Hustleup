@@ -101,7 +101,6 @@ exports.validarRemocaoEstudante = async (req, res) => {
   }
 };
 
-// Stubs para todas as funções esperadas nas rotas
 exports.criarSetor = async (req, res) => {
   try {
     const { nome } = req.body;
@@ -755,7 +754,6 @@ exports.obterProposta = async (req, res) => {
     const { id } = req.params;
     console.log('🔍 [obterProposta] Buscando proposta com ID:', id);
     
-    // Primeiro tentar sem associações para debug
     const proposta = await Proposta.findByPk(id);
     
     if (!proposta) {
@@ -912,30 +910,6 @@ exports.ativarProposta = async (req, res) => {
   } catch (err) {
     console.error('❌ Erro ao ativar proposta:', err);
     res.status(500).json({ message: 'Erro ao ativar proposta', error: err.message });
-  }
-};
-
-// Método de teste para debug
-exports.testeObterProposta = async (req, res) => {
-  try {
-    const { id } = req.params;
-    console.log('🧪 [testeObterProposta] ID recebido:', id);
-    
-    res.json({
-      id: parseInt(id),
-      nome: 'Proposta de Teste',
-      descricao: 'Esta é uma proposta de teste para verificar se a rota funciona',
-      estado: 'ativa',
-      empresa: {
-        id: 1,
-        nome: 'Empresa de Teste'
-      },
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    });
-  } catch (err) {
-    console.error('❌ [testeObterProposta] Erro:', err);
-    res.status(500).json({ message: 'Erro no teste', error: err.message });
   }
 };
 
@@ -1292,42 +1266,6 @@ exports.limparTodosEstudantes = async (req, res) => {
       message: 'Erro ao limpar estudantes', 
       error: err.message 
     });
-  }
-};
-
-// Debug: Verificar estado das empresas
-exports.debugEmpresas = async (req, res) => {
-  try {
-    const empresas = await Empresa.findAll({
-      include: [{
-        model: User,
-        as: 'user',
-        attributes: ['id', 'email', 'role'],
-        required: false
-      }],
-      attributes: ['id', 'nome', 'contacto', 'validado', 'userId']
-    });
-    
-    const debug = empresas.map(empresa => ({
-      id: empresa.id,
-      nome: empresa.nome,
-      contacto: empresa.contacto,
-      validado: empresa.validado,
-      userId: empresa.userId,
-      userEmail: empresa.user?.email || 'SEM USER',
-      temUser: !!empresa.user,
-      status: empresa.validado ? 'VALIDADA' : 'PENDENTE'
-    }));
-    
-    res.json({
-      total: empresas.length,
-      validadas: empresas.filter(e => e.validado).length,
-      pendentes: empresas.filter(e => !e.validado).length,
-      semUser: empresas.filter(e => !e.userId).length,
-      empresas: debug
-    });
-  } catch (err) {
-    res.status(500).json({ message: 'Erro ao fazer debug', error: err.message });
   }
 };
 

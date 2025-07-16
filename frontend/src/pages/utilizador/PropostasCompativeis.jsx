@@ -23,20 +23,16 @@ export default function PropostasCompativeis() {
     api.get("/estudante/propostas/compativeis")
       .then((res) => {
         setPropostas(res.data);
-        console.log('Propostas compatíveis recebidas:', res.data);
         if (res.data.length === 0) {
           console.log('Nenhuma proposta compatível encontrada - verifique se o estudante tem competências definidas');
         }
         
-        // Extrair departamentos únicos das próprias propostas (isso garante que os nomes são exatos)
         const departamentosUnicos = [...new Set(
-          res.data.map(p => p.departamento).filter(Boolean) // Remove valores null/undefined
+          res.data.map(p => p.departamento).filter(Boolean)
         )];
         
-        // Convertê-los para o formato esperado pelo dropdown
         const departamentosFormatados = departamentosUnicos.map(nome => ({ id: nome, nome }));
         
-        console.log("Departamentos extraídos das propostas:", departamentosFormatados);
         setDepartamentos(departamentosFormatados);
       })
       .catch((err) => {
@@ -49,9 +45,6 @@ export default function PropostasCompativeis() {
         alert(`Erro ao carregar propostas compatíveis: ${err.response?.data?.message || err.message}`);
       });
       
-    // Remover carregamento separado de setores - usamos apenas os das propostas
-      
-    // Carregar favoritos
     api.get("/estudante/favoritos")
       .then((res) => {
         setFavoritos(res.data.map((fav) => fav.id));

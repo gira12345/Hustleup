@@ -57,7 +57,6 @@ const ProtectedRoute = ({ children, allowedTypes }) => {
     return <Navigate to="/login" replace />;
   }
 
-  // Verificar se token é válido (básico - não vazio e tem formato)
   if (token.length < 10 || !token.includes('.')) {
     console.log('ProtectedRoute - Invalid token format');
     localStorage.removeItem('token');
@@ -66,7 +65,6 @@ const ProtectedRoute = ({ children, allowedTypes }) => {
     return <Navigate to="/login" replace />;
   }
   
-  // Forçar role para minúsculas para evitar problemas de case
   if (userType) userType = userType.toLowerCase();
   
   // Fallback: se não tiver 'tipo', tentar obter do 'user'

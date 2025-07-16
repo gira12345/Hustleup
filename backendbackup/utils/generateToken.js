@@ -1,10 +1,8 @@
 const jwt = require('jsonwebtoken');
 
 const generateToken = (user) => {
-  // Verificar se JWT_SECRET existe, com fallback
   let secret = process.env.JWT_SECRET;
   
-  // Fallback se não conseguir carregar do .env
   if (!secret) {
     secret = 'your_super_secret_jwt_key_here_change_in_production';
     process.env.JWT_SECRET = secret;
