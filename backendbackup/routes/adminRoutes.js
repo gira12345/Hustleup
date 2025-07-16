@@ -81,7 +81,6 @@ router.put('/empresas/:id', adminEditController.editarEmpresa);
 // Propostas (admin)
 router.get('/propostas', adminController.listarPropostas);
 router.get('/propostas/:id', adminController.obterProposta);
-router.get('/propostas/:id/teste', adminController.testeObterProposta); // Rota de teste
 router.post('/propostas', adminController.criarProposta);
 router.put('/propostas/:id', adminController.editarProposta);
 router.delete('/propostas/:id', adminController.eliminarProposta);
@@ -106,8 +105,5 @@ router.get('/kpi/departamentos', adminController.getKPIDepartamentos);
 router.post('/corrigir/empresas', adminController.corrigirEmpresasSemUser);
 router.post('/corrigir/estudantes', adminController.corrigirEstudantesSemRegisto);
 router.post('/corrigir/gestores', adminController.associarGestoresATodosDepartamentos);
-
-// Debug
-router.get('/debug/empresas', adminController.debugEmpresas);
 
 module.exports = router;
